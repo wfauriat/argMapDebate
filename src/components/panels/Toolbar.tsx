@@ -8,6 +8,7 @@ import { NODE_TYPE_CONFIG } from "@/constants/nodeConfig";
 import { exportGraph, importGraph } from "@/lib/serialization";
 import { loadExampleMap, EXAMPLE_MAPS } from "@/lib/exampleMaps";
 import { useThemeStore } from "@/store/useThemeStore";
+import AIGenerateButton from "./AIGenerateButton";
 
 export default function Toolbar() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -164,6 +165,8 @@ export default function Toolbar() {
       >
         Auto Layout
       </button>
+
+      <AIGenerateButton />
 
       <button
         onClick={handleClear}
