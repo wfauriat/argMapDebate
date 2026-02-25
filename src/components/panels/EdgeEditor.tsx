@@ -1,8 +1,8 @@
 "use client";
 
 import { useArgumentStore } from "@/store/useArgumentStore";
-import { EdgeType } from "@/types/edges";
-import { EDGE_TYPE_CONFIG } from "@/constants/edgeConfig";
+import { EdgeType, EdgeWeight } from "@/types/edges";
+import { EDGE_TYPE_CONFIG, EDGE_WEIGHT_CONFIG } from "@/constants/edgeConfig";
 
 export default function EdgeEditor() {
   const selectedEdgeId = useArgumentStore((s) => s.selectedEdgeId);
@@ -10,6 +10,7 @@ export default function EdgeEditor() {
   const nodes = useArgumentStore((s) => s.nodes);
   const updateEdgeType = useArgumentStore((s) => s.updateEdgeType);
   const updateEdgeNotes = useArgumentStore((s) => s.updateEdgeNotes);
+  const updateEdgeWeight = useArgumentStore((s) => s.updateEdgeWeight);
   const deleteEdge = useArgumentStore((s) => s.deleteEdge);
   const selectEdge = useArgumentStore((s) => s.selectEdge);
 
@@ -63,6 +64,35 @@ export default function EdgeEditor() {
                   style={{ backgroundColor: config.color }}
                 />
                 <span className="text-sm">{config.label}</span>
+              </label>
+            );
+          })}
+        </div>
+      </div>
+
+      <div>
+        <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">Weight</label>
+        <div className="space-y-1">
+          {[...Object.values(EdgeWeight), undefined].map((w) => {
+            const label = w ? EDGE_WEIGHT_CONFIG[w].label : "Not set";
+            const isSelected = edge.data?.weight === w;
+            return (
+              <label
+                key={label}
+                className={`flex items-center gap-2 p-2 rounded cursor-pointer border ${
+                  isSelected
+                    ? "border-blue-300 bg-blue-50 dark:border-blue-700 dark:bg-blue-950"
+                    : "border-transparent hover:bg-gray-50 dark:hover:bg-gray-800"
+                }`}
+              >
+                <input
+                  type="radio"
+                  name="edgeWeight"
+                  checked={isSelected}
+                  onChange={() => updateEdgeWeight(selectedEdgeId, w)}
+                  className="sr-only"
+                />
+                <span className="text-sm">{label}</span>
               </label>
             );
           })}

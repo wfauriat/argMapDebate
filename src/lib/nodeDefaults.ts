@@ -46,6 +46,7 @@ export function createNodeData(nodeType: NodeType): ArgumentNodeData {
         nodeType: NodeType.Assumption,
         label: "New Assumption",
         isExplicit: true,
+        isLoadBearing: false,
       } satisfies AssumptionData;
     case NodeType.Evidence:
       return {

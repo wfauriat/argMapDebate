@@ -3,6 +3,7 @@
 import { Handle, Position } from "@xyflow/react";
 import { NODE_TYPE_CONFIG } from "@/constants/nodeConfig";
 import { NodeType, NodeStatus } from "@/types/nodes";
+import { useArgumentStore } from "@/store/useArgumentStore";
 
 const STATUS_BADGE: Record<NodeStatus, { label: string; className: string }> = {
   [NodeStatus.Supported]: {
@@ -20,6 +21,7 @@ const STATUS_BADGE: Record<NodeStatus, { label: string; className: string }> = {
 };
 
 interface BaseNodeProps {
+  nodeId?: string;
   nodeType: NodeType;
   label: string;
   status: NodeStatus;
@@ -28,6 +30,7 @@ interface BaseNodeProps {
 }
 
 export default function BaseNode({
+  nodeId,
   nodeType,
   label,
   status,
@@ -36,12 +39,14 @@ export default function BaseNode({
 }: BaseNodeProps) {
   const config = NODE_TYPE_CONFIG[nodeType];
   const badge = STATUS_BADGE[status];
+  const highlightedNodeIds = useArgumentStore((s) => s.highlightedNodeIds);
+  const isHighlighted = nodeId ? highlightedNodeIds.has(nodeId) : false;
 
   return (
     <div
       className={`w-64 rounded-lg border-2 bg-white shadow-md dark:bg-gray-800 dark:shadow-lg dark:shadow-black/30 ${config.color} ${
         selected ? "ring-2 ring-blue-400 ring-offset-1 dark:ring-offset-gray-900" : ""
-      }`}
+      } ${isHighlighted ? "ring-2 ring-amber-400 ring-offset-1 dark:ring-offset-gray-900" : ""}`}
     >
       <Handle type="target" position={Position.Top} className="!bg-gray-400 dark:!bg-gray-500 !w-3 !h-3" />
 

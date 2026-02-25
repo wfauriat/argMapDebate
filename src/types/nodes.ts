@@ -43,6 +43,7 @@ export interface ValueData extends BaseNodeData {
 export interface AssumptionData extends BaseNodeData {
   nodeType: NodeType.Assumption;
   isExplicit: boolean;
+  isLoadBearing?: boolean;
 }
 
 export type EvidenceSourceType =

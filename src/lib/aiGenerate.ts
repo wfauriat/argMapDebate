@@ -50,10 +50,12 @@ Node types and their required fields:
 6. Policy — { nodeType: "Policy", label: string, notes: string, status: "Unsupported", scope: string }
 
 Edge types and their required fields:
-1. Supports — { edgeType: "Supports", notes: string }
-2. Undermines — { edgeType: "Undermines", notes: string }
-3. DependsOn — { edgeType: "DependsOn", notes: string }
-4. Contradicts — { edgeType: "Contradicts", notes: string }
+1. Supports — { edgeType: "Supports", notes: string, weight?: "Strong"|"Moderate"|"Weak" }
+2. Undermines — { edgeType: "Undermines", notes: string, weight?: "Strong"|"Moderate"|"Weak" }
+3. DependsOn — { edgeType: "DependsOn", notes: string, weight?: "Strong"|"Moderate"|"Weak" }
+4. Contradicts — { edgeType: "Contradicts", notes: string, weight?: "Strong"|"Moderate"|"Weak" }
+
+Edge weight is optional. Use "Strong" for well-established relationships, "Moderate" for typical ones, "Weak" for tenuous connections.
 
 Output format — a single JSON object:
 {

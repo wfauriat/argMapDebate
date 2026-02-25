@@ -10,10 +10,11 @@ import {
 import type { ArgumentNode, ArgumentNodeData } from "@/types/nodes";
 import { NodeType, NodeStatus } from "@/types/nodes";
 import type { ArgumentEdge, ArgumentEdgeData } from "@/types/edges";
-import { EdgeType } from "@/types/edges";
+import { EdgeType, EdgeWeight } from "@/types/edges";
 import type { ArgumentGraph } from "@/types/graph";
 import { createNodeData } from "@/lib/nodeDefaults";
 import { layoutGraph } from "@/lib/layoutEngine";
+import { getLoadBearingAssumptions } from "@/analysis/structuralAnalysis";
 
 interface ArgumentState {
   nodes: ArgumentNode[];
@@ -24,6 +25,13 @@ interface ArgumentState {
   graphDescription: string;
   viewport: Viewport;
   layoutTrigger: number;
+
+  // Highlights (sensitivity analysis)
+  highlightedNodeIds: Set<string>;
+  highlightedEdgeIds: Set<string>;
+  weakestEdgeId: string | null;
+  setHighlights: (nodeIds: string[], edgeIds: string[], weakestEdgeId: string | null) => void;
+  clearHighlights: () => void;
 
   // React Flow integration
   onNodesChange: OnNodesChange<ArgumentNode>;
@@ -39,6 +47,7 @@ interface ArgumentState {
   addEdge: (source: string, target: string, edgeType: EdgeType) => void;
   updateEdgeType: (id: string, edgeType: EdgeType) => void;
   updateEdgeNotes: (id: string, notes: string) => void;
+  updateEdgeWeight: (id: string, weight: EdgeWeight | undefined) => void;
   deleteEdge: (id: string) => void;
 
   // Selection
@@ -77,6 +86,26 @@ export const useArgumentStore = create<ArgumentState>((set, get) => ({
   graphDescription: "",
   viewport: { x: 0, y: 0, zoom: 1 },
   layoutTrigger: 0,
+
+  highlightedNodeIds: new Set<string>(),
+  highlightedEdgeIds: new Set<string>(),
+  weakestEdgeId: null,
+
+  setHighlights: (nodeIds, edgeIds, weakestEdgeId) => {
+    set({
+      highlightedNodeIds: new Set(nodeIds),
+      highlightedEdgeIds: new Set(edgeIds),
+      weakestEdgeId,
+    });
+  },
+
+  clearHighlights: () => {
+    set({
+      highlightedNodeIds: new Set<string>(),
+      highlightedEdgeIds: new Set<string>(),
+      weakestEdgeId: null,
+    });
+  },
 
   onNodesChange: (changes) => {
     set({ nodes: applyNodeChanges(changes, get().nodes) });
@@ -176,6 +205,16 @@ export const useArgumentStore = create<ArgumentState>((set, get) => ({
     });
   },
 
+  updateEdgeWeight: (id, weight) => {
+    set({
+      edges: get().edges.map((edge) =>
+        edge.id === id
+          ? { ...edge, data: { ...edge.data!, weight } }
+          : edge
+      ),
+    });
+  },
+
   deleteEdge: (id) => {
     set({
       edges: get().edges.filter((e) => e.id !== id),
@@ -227,6 +266,16 @@ export const useArgumentStore = create<ArgumentState>((set, get) => ({
 
   recomputeStatuses: () => {
     const { nodes, edges } = get();
+
+    // Compute load-bearing assumptions
+    const loadBearing = getLoadBearingAssumptions(nodes, edges);
+    const loadBearingThreshold = Math.max(1, Math.ceil(nodes.length * 0.2));
+    const loadBearingIds = new Set(
+      loadBearing
+        .filter((lb) => lb.downstreamCount >= loadBearingThreshold)
+        .map((lb) => lb.nodeId)
+    );
+
     const updatedNodes = nodes.map((node) => {
       const incomingEdges = edges.filter((e) => e.target === node.id);
       const hasSupport = incomingEdges.some(
@@ -245,10 +294,20 @@ export const useArgumentStore = create<ArgumentState>((set, get) => ({
         status = NodeStatus.Unsupported;
       }
 
+      let updated = node;
       if (node.data.status !== status) {
-        return { ...node, data: { ...node.data, status } };
+        updated = { ...updated, data: { ...updated.data, status } };
       }
-      return node;
+
+      // Set isLoadBearing for Assumption nodes
+      if (node.data.nodeType === NodeType.Assumption) {
+        const isLB = loadBearingIds.has(node.id);
+        if ((node.data as import("@/types/nodes").AssumptionData).isLoadBearing !== isLB) {
+          updated = { ...updated, data: { ...updated.data, isLoadBearing: isLB } };
+        }
+      }
+
+      return updated;
     });
     set({ nodes: updatedNodes });
   },

@@ -1,6 +1,6 @@
 {
   "title": "Carbon Tax Debate",
-  "description": "Should a national carbon tax at $50/ton CO2 be implemented? This map explores supporting and opposing arguments.",
+  "description": "Should a national carbon tax at $50/ton CO2 be implemented? This map explores supporting and opposing arguments, with edge weights and assumptions that showcase structural analysis.",
   "nodes": [
     {
       "id": "policy-1",
@@ -74,9 +74,10 @@
       "data": {
         "nodeType": "Assumption",
         "label": "Markets respond efficiently to price signals",
-        "notes": "Standard economic assumption — may not hold in all sectors",
+        "notes": "Standard economic assumption — may not hold in all sectors. If this assumption fails, the core causal mechanism breaks down, and downstream claims lose their support.",
         "status": "Unsupported",
-        "isExplicit": false
+        "isExplicit": false,
+        "isLoadBearing": false
       }
     },
     {
@@ -166,6 +167,58 @@
         "status": "Unsupported",
         "sources": ["Naegele & Zaklan (2019)"]
       }
+    },
+    {
+      "id": "assumption-2",
+      "type": "Assumption",
+      "position": { "x": 0, "y": 600 },
+      "data": {
+        "nodeType": "Assumption",
+        "label": "Viable clean energy alternatives exist at scale",
+        "notes": "Without affordable alternatives, a carbon tax raises costs without enabling a transition. This assumption underpins both the emission reduction mechanism and the rebate design.",
+        "status": "Unsupported",
+        "isExplicit": false,
+        "isLoadBearing": false
+      }
+    },
+    {
+      "id": "evidence-4",
+      "type": "Evidence",
+      "position": { "x": -200, "y": 800 },
+      "data": {
+        "nodeType": "Evidence",
+        "label": "IEA: Renewable energy costs dropped 90% since 2010",
+        "notes": "Solar PV and wind are now cost-competitive with fossil fuels in most markets",
+        "status": "Unsupported",
+        "sourceType": "statistic",
+        "citation": "IEA World Energy Outlook (2023)",
+        "url": ""
+      }
+    },
+    {
+      "id": "assumption-3",
+      "type": "Assumption",
+      "position": { "x": 600, "y": 200 },
+      "data": {
+        "nodeType": "Assumption",
+        "label": "Border carbon adjustments can prevent leakage",
+        "notes": "Assumes trade mechanisms can neutralize competitive disadvantage — EU CBAM is a first attempt.",
+        "status": "Unsupported",
+        "isExplicit": true,
+        "isLoadBearing": false
+      }
+    },
+    {
+      "id": "factual-4",
+      "type": "FactualClaim",
+      "position": { "x": -200, "y": 600 },
+      "data": {
+        "nodeType": "FactualClaim",
+        "label": "EU CBAM shows border adjustments are technically feasible",
+        "notes": "European Union Carbon Border Adjustment Mechanism launched 2023",
+        "status": "Unsupported",
+        "sources": ["European Commission (2023)"]
+      }
     }
   ],
   "edges": [
@@ -174,98 +227,140 @@
       "source": "causal-1",
       "target": "policy-1",
       "type": "Supports",
-      "data": { "edgeType": "Supports", "notes": "Core mechanism supporting the policy" }
+      "data": { "edgeType": "Supports", "notes": "Core mechanism supporting the policy", "weight": "Strong" }
     },
     {
       "id": "edge-2",
       "source": "evidence-1",
       "target": "causal-1",
       "type": "Supports",
-      "data": { "edgeType": "Supports", "notes": "Real-world evidence from BC" }
+      "data": { "edgeType": "Supports", "notes": "Real-world evidence from BC", "weight": "Strong" }
     },
     {
       "id": "edge-3",
       "source": "evidence-2",
       "target": "causal-1",
       "type": "Supports",
-      "data": { "edgeType": "Supports", "notes": "Real-world evidence from Sweden" }
+      "data": { "edgeType": "Supports", "notes": "Real-world evidence from Sweden", "weight": "Strong" }
     },
     {
       "id": "edge-4",
       "source": "value-1",
       "target": "policy-1",
       "type": "Supports",
-      "data": { "edgeType": "Supports", "notes": "Value alignment" }
+      "data": { "edgeType": "Supports", "notes": "Value alignment", "weight": "Moderate" }
     },
     {
       "id": "edge-5",
       "source": "causal-1",
       "target": "assumption-1",
       "type": "DependsOn",
-      "data": { "edgeType": "DependsOn", "notes": "Causal claim assumes market responsiveness" }
+      "data": { "edgeType": "DependsOn", "notes": "Causal claim assumes market responsiveness", "weight": "Strong" }
     },
     {
       "id": "edge-6",
       "source": "factual-1",
       "target": "policy-1",
       "type": "Undermines",
-      "data": { "edgeType": "Undermines", "notes": "Economic cost argument" }
+      "data": { "edgeType": "Undermines", "notes": "Economic cost argument", "weight": "Moderate" }
     },
     {
       "id": "edge-7",
       "source": "factual-1",
       "target": "causal-2",
       "type": "Supports",
-      "data": { "edgeType": "Supports", "notes": "Higher costs lead to competitiveness concerns" }
+      "data": { "edgeType": "Supports", "notes": "Higher costs lead to competitiveness concerns", "weight": "Moderate" }
     },
     {
       "id": "edge-8",
       "source": "factual-2",
       "target": "policy-1",
       "type": "Undermines",
-      "data": { "edgeType": "Undermines", "notes": "Equity concern" }
+      "data": { "edgeType": "Undermines", "notes": "Equity concern", "weight": "Moderate" }
     },
     {
       "id": "edge-9",
       "source": "causal-3",
       "target": "factual-2",
       "type": "Undermines",
-      "data": { "edgeType": "Undermines", "notes": "Revenue-neutral design counters regressivity" }
+      "data": { "edgeType": "Undermines", "notes": "Revenue-neutral design counters regressivity", "weight": "Moderate" }
     },
     {
       "id": "edge-10",
       "source": "evidence-3",
       "target": "causal-3",
       "type": "Supports",
-      "data": { "edgeType": "Supports", "notes": "Canadian evidence supports rebate effectiveness" }
+      "data": { "edgeType": "Supports", "notes": "Canadian evidence supports rebate effectiveness", "weight": "Moderate" }
     },
     {
       "id": "edge-11",
       "source": "value-2",
       "target": "factual-1",
       "type": "Supports",
-      "data": { "edgeType": "Supports", "notes": "Value basis for economic concern" }
+      "data": { "edgeType": "Supports", "notes": "Value basis for economic concern", "weight": "Weak" }
     },
     {
       "id": "edge-12",
       "source": "value-1",
       "target": "value-2",
       "type": "Contradicts",
-      "data": { "edgeType": "Contradicts", "notes": "Tension between environmental and economic values" }
+      "data": { "edgeType": "Contradicts", "notes": "Tension between environmental and economic values", "weight": "Strong" }
     },
     {
       "id": "edge-13",
       "source": "factual-3",
       "target": "causal-2",
       "type": "Undermines",
-      "data": { "edgeType": "Undermines", "notes": "Empirical evidence weakens leakage argument" }
+      "data": { "edgeType": "Undermines", "notes": "Empirical evidence weakens leakage argument", "weight": "Moderate" }
     },
     {
       "id": "edge-14",
       "source": "causal-2",
       "target": "policy-1",
       "type": "Undermines",
-      "data": { "edgeType": "Undermines", "notes": "Competitiveness concerns undermine the policy" }
+      "data": { "edgeType": "Undermines", "notes": "Competitiveness concerns undermine the policy", "weight": "Weak" }
+    },
+    {
+      "id": "edge-15",
+      "source": "causal-1",
+      "target": "assumption-2",
+      "type": "DependsOn",
+      "data": { "edgeType": "DependsOn", "notes": "Emission reductions require available clean alternatives", "weight": "Strong" }
+    },
+    {
+      "id": "edge-16",
+      "source": "causal-3",
+      "target": "assumption-2",
+      "type": "DependsOn",
+      "data": { "edgeType": "DependsOn", "notes": "Rebate design assumes alternatives exist for consumers to switch to", "weight": "Moderate" }
+    },
+    {
+      "id": "edge-17",
+      "source": "evidence-4",
+      "target": "assumption-2",
+      "type": "Supports",
+      "data": { "edgeType": "Supports", "notes": "Falling renewable costs support the availability assumption", "weight": "Strong" }
+    },
+    {
+      "id": "edge-18",
+      "source": "factual-1",
+      "target": "assumption-3",
+      "type": "DependsOn",
+      "data": { "edgeType": "DependsOn", "notes": "Competitiveness concern can be mitigated if border adjustments work", "weight": "Weak" }
+    },
+    {
+      "id": "edge-19",
+      "source": "factual-4",
+      "target": "assumption-3",
+      "type": "Supports",
+      "data": { "edgeType": "Supports", "notes": "EU CBAM demonstrates technical feasibility", "weight": "Weak" }
+    },
+    {
+      "id": "edge-20",
+      "source": "factual-4",
+      "target": "factual-3",
+      "type": "Supports",
+      "data": { "edgeType": "Supports", "notes": "Border adjustments support the claim that leakage is manageable", "weight": "Weak" }
     }
   ]
 }

@@ -5,10 +5,10 @@ import type { NodeProps } from "@xyflow/react";
 import BaseNode from "./BaseNode";
 import { NodeType, type CausalClaimData } from "@/types/nodes";
 
-function CausalClaimNode({ data, selected }: NodeProps) {
+function CausalClaimNode({ id, data, selected }: NodeProps) {
   const d = data as unknown as CausalClaimData;
   return (
-    <BaseNode nodeType={NodeType.CausalClaim} label={d.label} status={d.status} selected={selected}>
+    <BaseNode nodeId={id} nodeType={NodeType.CausalClaim} label={d.label} status={d.status} selected={selected}>
       {d.mechanism && (
         <p className="text-xs text-purple-600 dark:text-purple-400 mt-1 italic">Mechanism: {d.mechanism}</p>
       )}

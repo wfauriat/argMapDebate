@@ -1,4 +1,4 @@
-import { EdgeType } from "@/types/edges";
+import { EdgeType, EdgeWeight } from "@/types/edges";
 
 export interface EdgeTypeConfig {
   label: string;
@@ -8,6 +8,18 @@ export interface EdgeTypeConfig {
   markerEnd: boolean;
   markerStart: boolean;  // true for double-headed (Contradicts)
 }
+
+export interface EdgeWeightConfig {
+  label: string;
+  numericValue: number;
+  strokeWidth: number;
+}
+
+export const EDGE_WEIGHT_CONFIG: Record<EdgeWeight, EdgeWeightConfig> = {
+  [EdgeWeight.Strong]: { label: "Strong", numericValue: 3, strokeWidth: 3 },
+  [EdgeWeight.Moderate]: { label: "Moderate", numericValue: 2, strokeWidth: 2 },
+  [EdgeWeight.Weak]: { label: "Weak", numericValue: 1, strokeWidth: 1.5 },
+};
 
 export const EDGE_TYPE_CONFIG: Record<EdgeType, EdgeTypeConfig> = {
   [EdgeType.Supports]: {

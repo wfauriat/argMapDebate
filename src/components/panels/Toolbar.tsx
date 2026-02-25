@@ -9,10 +9,14 @@ import { exportGraph, importGraph } from "@/lib/serialization";
 import { loadExampleMap, EXAMPLE_MAPS } from "@/lib/exampleMaps";
 import { useThemeStore } from "@/store/useThemeStore";
 import AIGenerateButton from "./AIGenerateButton";
+import WizardButton from "./WizardButton";
+import { ARGUMENTATION_SCHEMES } from "@/templates/argumentSchemes";
+import { instantiateScheme } from "@/templates/instantiateScheme";
 
 export default function Toolbar() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [exampleDropdownOpen, setExampleDropdownOpen] = useState(false);
+  const [templateDropdownOpen, setTemplateDropdownOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const addNode = useArgumentStore((s) => s.addNode);
   const clearGraph = useArgumentStore((s) => s.clearGraph);
@@ -74,6 +78,19 @@ export default function Toolbar() {
     }
   };
 
+  const handleLoadTemplate = (schemeId: string) => {
+    const scheme = ARGUMENTATION_SCHEMES.find((s) => s.id === schemeId);
+    if (!scheme) return;
+    if (nodes.length > 0 && !confirm("This will replace the current argument map. Continue?")) {
+      setTemplateDropdownOpen(false);
+      return;
+    }
+    const graph = instantiateScheme(scheme);
+    loadGraph(graph);
+    autoLayout();
+    setTemplateDropdownOpen(false);
+  };
+
   const handleClear = () => {
     if (nodes.length === 0 || confirm("Clear the entire argument map?")) {
       clearGraph();
@@ -82,6 +99,7 @@ export default function Toolbar() {
 
   return (
     <div className="flex items-center gap-2 px-4 py-2 border-b border-gray-200 bg-white dark:bg-gray-900 dark:border-gray-700">
+      {/* -- Create group -- */}
       <div className="relative">
         <button
           onClick={() => setDropdownOpen(!dropdownOpen)}
@@ -111,8 +129,39 @@ export default function Toolbar() {
         )}
       </div>
 
+      <div className="relative">
+        <button
+          onClick={() => setTemplateDropdownOpen(!templateDropdownOpen)}
+          className="px-3 py-1.5 text-sm text-gray-700 border border-gray-300 rounded hover:bg-gray-50 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700"
+        >
+          Template ▾
+        </button>
+        {templateDropdownOpen && (
+          <>
+            <div className="fixed inset-0 z-10" onClick={() => setTemplateDropdownOpen(false)} />
+            <div className="absolute left-0 top-full mt-1 z-20 bg-white border border-gray-200 rounded-lg shadow-lg py-1 w-72 dark:bg-gray-800 dark:border-gray-600">
+              {ARGUMENTATION_SCHEMES.map((scheme) => (
+                <button
+                  key={scheme.id}
+                  onClick={() => handleLoadTemplate(scheme.id)}
+                  className="w-full text-left px-3 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 dark:text-gray-200"
+                >
+                  <span className="font-medium">{scheme.name}</span>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{scheme.description}</p>
+                </button>
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+
+      <WizardButton />
+
+      <AIGenerateButton />
+
       <div className="h-6 w-px bg-gray-200 dark:bg-gray-700" />
 
+      {/* -- File group -- */}
       <button
         onClick={handleExport}
         className="px-3 py-1.5 text-sm text-gray-700 border border-gray-300 rounded hover:bg-gray-50 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700"
@@ -159,14 +208,15 @@ export default function Toolbar() {
         )}
       </div>
 
+      <div className="h-6 w-px bg-gray-200 dark:bg-gray-700" />
+
+      {/* -- Layout & actions group -- */}
       <button
         onClick={() => autoLayout()}
         className="px-3 py-1.5 text-sm text-gray-700 border border-gray-300 rounded hover:bg-gray-50 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700"
       >
         Auto Layout
       </button>
-
-      <AIGenerateButton />
 
       <button
         onClick={handleClear}
@@ -175,13 +225,14 @@ export default function Toolbar() {
         Clear
       </button>
 
-      <div className="h-6 w-px bg-gray-200 dark:bg-gray-700 ml-2" />
+      <div className="h-6 w-px bg-gray-200 dark:bg-gray-700" />
 
+      {/* -- Title -- */}
       <input
         type="text"
         value={graphTitle}
         onChange={(e) => setGraphTitle(e.target.value)}
-        className="ml-2 text-lg font-semibold text-gray-900 bg-transparent border-b border-transparent hover:border-gray-300 focus:border-blue-500 focus:outline-none px-1 dark:text-gray-100 dark:hover:border-gray-600"
+        className="text-lg font-semibold text-gray-900 bg-transparent border-b border-transparent hover:border-gray-300 focus:border-blue-500 focus:outline-none px-1 min-w-0 dark:text-gray-100 dark:hover:border-gray-600"
       />
 
       <div className="ml-auto">
