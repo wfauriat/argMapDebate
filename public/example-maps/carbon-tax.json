@@ -1,0 +1,271 @@
+{
+  "title": "Carbon Tax Debate",
+  "description": "Should a national carbon tax at $50/ton CO2 be implemented? This map explores supporting and opposing arguments.",
+  "nodes": [
+    {
+      "id": "policy-1",
+      "type": "Policy",
+      "position": { "x": 400, "y": 0 },
+      "data": {
+        "nodeType": "Policy",
+        "label": "Implement a national carbon tax at $50/ton CO2",
+        "notes": "Primary policy proposal under debate",
+        "status": "Contested",
+        "scope": "National"
+      }
+    },
+    {
+      "id": "causal-1",
+      "type": "CausalClaim",
+      "position": { "x": 100, "y": 200 },
+      "data": {
+        "nodeType": "CausalClaim",
+        "label": "Carbon pricing reduces emissions by incentivizing cleaner alternatives",
+        "notes": "Core mechanism of carbon tax",
+        "status": "Supported",
+        "mechanism": "Price signal makes fossil fuels more expensive, shifting demand to renewables",
+        "sources": ["Nordhaus (2019)", "Stavins (2020)"]
+      }
+    },
+    {
+      "id": "evidence-1",
+      "type": "Evidence",
+      "position": { "x": -100, "y": 400 },
+      "data": {
+        "nodeType": "Evidence",
+        "label": "British Columbia's carbon tax reduced emissions 5-15% since 2008",
+        "notes": "One of the most studied carbon tax implementations",
+        "status": "Unsupported",
+        "sourceType": "study",
+        "citation": "Murray & Rivers (2015). British Columbia's revenue-neutral carbon tax.",
+        "url": ""
+      }
+    },
+    {
+      "id": "evidence-2",
+      "type": "Evidence",
+      "position": { "x": 100, "y": 400 },
+      "data": {
+        "nodeType": "Evidence",
+        "label": "Sweden's carbon tax led to 25% emission reduction since 1991",
+        "notes": "Highest carbon tax rate globally at ~$130/ton",
+        "status": "Unsupported",
+        "sourceType": "statistic",
+        "citation": "World Bank Carbon Pricing Dashboard (2023)",
+        "url": ""
+      }
+    },
+    {
+      "id": "value-1",
+      "type": "Value",
+      "position": { "x": 300, "y": 400 },
+      "data": {
+        "nodeType": "Value",
+        "label": "Environmental sustainability for future generations",
+        "notes": "Intergenerational equity concern",
+        "status": "Unsupported",
+        "domain": "Environmental"
+      }
+    },
+    {
+      "id": "assumption-1",
+      "type": "Assumption",
+      "position": { "x": -100, "y": 200 },
+      "data": {
+        "nodeType": "Assumption",
+        "label": "Markets respond efficiently to price signals",
+        "notes": "Standard economic assumption — may not hold in all sectors",
+        "status": "Unsupported",
+        "isExplicit": false
+      }
+    },
+    {
+      "id": "factual-1",
+      "type": "FactualClaim",
+      "position": { "x": 700, "y": 200 },
+      "data": {
+        "nodeType": "FactualClaim",
+        "label": "Carbon tax increases costs for energy-intensive industries",
+        "notes": "Direct economic effect",
+        "status": "Unsupported",
+        "sources": ["CBO (2022)"]
+      }
+    },
+    {
+      "id": "causal-2",
+      "type": "CausalClaim",
+      "position": { "x": 700, "y": 400 },
+      "data": {
+        "nodeType": "CausalClaim",
+        "label": "Higher costs reduce international competitiveness of domestic firms",
+        "notes": "Carbon leakage concern",
+        "status": "Supported",
+        "mechanism": "Unilateral carbon pricing creates cost disadvantage vs countries without carbon pricing",
+        "sources": []
+      }
+    },
+    {
+      "id": "factual-2",
+      "type": "FactualClaim",
+      "position": { "x": 900, "y": 200 },
+      "data": {
+        "nodeType": "FactualClaim",
+        "label": "Carbon tax is regressive — disproportionately impacts low-income households",
+        "notes": "Low-income households spend larger share of income on energy",
+        "status": "Contested",
+        "sources": ["Metcalf (2019)"]
+      }
+    },
+    {
+      "id": "causal-3",
+      "type": "CausalClaim",
+      "position": { "x": 500, "y": 400 },
+      "data": {
+        "nodeType": "CausalClaim",
+        "label": "Revenue-neutral design can offset regressivity through rebates",
+        "notes": "Dividend approach: return revenue equally to all citizens",
+        "status": "Supported",
+        "mechanism": "Per-capita dividend gives low-income households more than they pay in carbon costs",
+        "sources": ["Fremstad & Paul (2019)"]
+      }
+    },
+    {
+      "id": "evidence-3",
+      "type": "Evidence",
+      "position": { "x": 500, "y": 600 },
+      "data": {
+        "nodeType": "Evidence",
+        "label": "Canada's carbon rebate makes 80% of households net beneficiaries",
+        "notes": "Parliamentary Budget Office analysis",
+        "status": "Unsupported",
+        "sourceType": "statistic",
+        "citation": "PBO Canada (2023). A Distributional Analysis of the Federal Fuel Charge.",
+        "url": ""
+      }
+    },
+    {
+      "id": "value-2",
+      "type": "Value",
+      "position": { "x": 900, "y": 400 },
+      "data": {
+        "nodeType": "Value",
+        "label": "Economic competitiveness and job preservation",
+        "notes": "Tension with environmental goals",
+        "status": "Unsupported",
+        "domain": "Economic"
+      }
+    },
+    {
+      "id": "factual-3",
+      "type": "FactualClaim",
+      "position": { "x": 200, "y": 600 },
+      "data": {
+        "nodeType": "FactualClaim",
+        "label": "Carbon leakage effects are smaller than industry claims suggest",
+        "notes": "Empirical evidence from EU ETS",
+        "status": "Unsupported",
+        "sources": ["Naegele & Zaklan (2019)"]
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-1",
+      "source": "causal-1",
+      "target": "policy-1",
+      "type": "Supports",
+      "data": { "edgeType": "Supports", "notes": "Core mechanism supporting the policy" }
+    },
+    {
+      "id": "edge-2",
+      "source": "evidence-1",
+      "target": "causal-1",
+      "type": "Supports",
+      "data": { "edgeType": "Supports", "notes": "Real-world evidence from BC" }
+    },
+    {
+      "id": "edge-3",
+      "source": "evidence-2",
+      "target": "causal-1",
+      "type": "Supports",
+      "data": { "edgeType": "Supports", "notes": "Real-world evidence from Sweden" }
+    },
+    {
+      "id": "edge-4",
+      "source": "value-1",
+      "target": "policy-1",
+      "type": "Supports",
+      "data": { "edgeType": "Supports", "notes": "Value alignment" }
+    },
+    {
+      "id": "edge-5",
+      "source": "causal-1",
+      "target": "assumption-1",
+      "type": "DependsOn",
+      "data": { "edgeType": "DependsOn", "notes": "Causal claim assumes market responsiveness" }
+    },
+    {
+      "id": "edge-6",
+      "source": "factual-1",
+      "target": "policy-1",
+      "type": "Undermines",
+      "data": { "edgeType": "Undermines", "notes": "Economic cost argument" }
+    },
+    {
+      "id": "edge-7",
+      "source": "factual-1",
+      "target": "causal-2",
+      "type": "Supports",
+      "data": { "edgeType": "Supports", "notes": "Higher costs lead to competitiveness concerns" }
+    },
+    {
+      "id": "edge-8",
+      "source": "factual-2",
+      "target": "policy-1",
+      "type": "Undermines",
+      "data": { "edgeType": "Undermines", "notes": "Equity concern" }
+    },
+    {
+      "id": "edge-9",
+      "source": "causal-3",
+      "target": "factual-2",
+      "type": "Undermines",
+      "data": { "edgeType": "Undermines", "notes": "Revenue-neutral design counters regressivity" }
+    },
+    {
+      "id": "edge-10",
+      "source": "evidence-3",
+      "target": "causal-3",
+      "type": "Supports",
+      "data": { "edgeType": "Supports", "notes": "Canadian evidence supports rebate effectiveness" }
+    },
+    {
+      "id": "edge-11",
+      "source": "value-2",
+      "target": "factual-1",
+      "type": "Supports",
+      "data": { "edgeType": "Supports", "notes": "Value basis for economic concern" }
+    },
+    {
+      "id": "edge-12",
+      "source": "value-1",
+      "target": "value-2",
+      "type": "Contradicts",
+      "data": { "edgeType": "Contradicts", "notes": "Tension between environmental and economic values" }
+    },
+    {
+      "id": "edge-13",
+      "source": "factual-3",
+      "target": "causal-2",
+      "type": "Undermines",
+      "data": { "edgeType": "Undermines", "notes": "Empirical evidence weakens leakage argument" }
+    },
+    {
+      "id": "edge-14",
+      "source": "causal-2",
+      "target": "policy-1",
+      "type": "Undermines",
+      "data": { "edgeType": "Undermines", "notes": "Competitiveness concerns undermine the policy" }
+    }
+  ]
+}
