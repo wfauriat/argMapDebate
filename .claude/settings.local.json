@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "WebFetch(domain:reactflow.dev)",
+      "Bash(npx create-next-app@latest:*)",
+      "Bash(cp:*)",
+      "Bash(npm install:*)",
+      "Bash(npx next:*)",
+      "Bash(sleep 3:*)",
+      "Bash(fuser:*)",
+      "Bash(npm run:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npx tailwindcss:*)",
+      "Bash(ls:*)",
+      "Bash(cat:*)",
+      "Bash(pkill:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
+    ]
+  }
+}
