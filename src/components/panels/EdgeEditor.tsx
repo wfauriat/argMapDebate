@@ -1,18 +1,19 @@
 "use client";
 
 import { useArgumentStore } from "@/store/useArgumentStore";
+import { useSelectionStore } from "@/store/useSelectionStore";
 import { EdgeType, EdgeWeight } from "@/types/edges";
 import { EDGE_TYPE_CONFIG, EDGE_WEIGHT_CONFIG } from "@/constants/edgeConfig";
 
 export default function EdgeEditor() {
-  const selectedEdgeId = useArgumentStore((s) => s.selectedEdgeId);
+  const selectedEdgeId = useSelectionStore((s) => s.selectedEdgeId);
   const edges = useArgumentStore((s) => s.edges);
   const nodes = useArgumentStore((s) => s.nodes);
   const updateEdgeType = useArgumentStore((s) => s.updateEdgeType);
   const updateEdgeNotes = useArgumentStore((s) => s.updateEdgeNotes);
   const updateEdgeWeight = useArgumentStore((s) => s.updateEdgeWeight);
   const deleteEdge = useArgumentStore((s) => s.deleteEdge);
-  const selectEdge = useArgumentStore((s) => s.selectEdge);
+  const selectEdge = useSelectionStore((s) => s.selectEdge);
 
   const edge = edges.find((e) => e.id === selectedEdgeId);
   if (!edge || !selectedEdgeId) return null;

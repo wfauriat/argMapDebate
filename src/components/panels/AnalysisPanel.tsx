@@ -1,8 +1,10 @@
 "use client";
 
-import { useCallback, useRef } from "react";
+import { useCallback, useMemo, useRef } from "react";
 import { useReactFlow } from "@xyflow/react";
 import { useArgumentStore } from "@/store/useArgumentStore";
+import { useSelectionStore } from "@/store/useSelectionStore";
+import { useHighlightStore } from "@/store/useHighlightStore";
 import {
   getUnsupportedClaims,
   getIsolatedNodes,
@@ -20,12 +22,19 @@ const NODE_HEIGHT = 120;
 export default function AnalysisPanel() {
   const nodes = useArgumentStore((s) => s.nodes);
   const edges = useArgumentStore((s) => s.edges);
-  const selectNode = useArgumentStore((s) => s.selectNode);
-  const setHighlights = useArgumentStore((s) => s.setHighlights);
-  const clearHighlights = useArgumentStore((s) => s.clearHighlights);
-  const highlightedNodeIds = useArgumentStore((s) => s.highlightedNodeIds);
+  const selectNode = useSelectionStore((s) => s.selectNode);
+  const setHighlights = useHighlightStore((s) => s.setHighlights);
+  const clearHighlights = useHighlightStore((s) => s.clearHighlights);
+  const hasHighlightsRaw = useHighlightStore((s) => s.highlightedNodeIds.size > 0);
   const reactFlow = useReactFlow();
   const highlightTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const unsupported = useMemo(() => getUnsupportedClaims(nodes, edges), [nodes, edges]);
+  const isolated = useMemo(() => getIsolatedNodes(nodes, edges), [nodes, edges]);
+  const stats = useMemo(() => getGraphStats(nodes, edges), [nodes, edges]);
+  const loadBearing = useMemo(() => getLoadBearingAssumptions(nodes, edges), [nodes, edges]);
+  const sensitivity = useMemo(() => getSensitivityAnalysis(nodes, edges), [nodes, edges]);
+  const hasHighlights = hasHighlightsRaw;
 
   const focusNode = useCallback((nodeId: string) => {
     const node = nodes.find((n) => n.id === nodeId);
@@ -72,13 +81,6 @@ export default function AnalysisPanel() {
       </div>
     );
   }
-
-  const unsupported = getUnsupportedClaims(nodes, edges);
-  const isolated = getIsolatedNodes(nodes, edges);
-  const stats = getGraphStats(nodes, edges);
-  const loadBearing = getLoadBearingAssumptions(nodes, edges);
-  const sensitivity = getSensitivityAnalysis(nodes, edges);
-  const hasHighlights = highlightedNodeIds.size > 0;
 
   return (
     <div className="p-4 space-y-5">

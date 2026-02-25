@@ -9,29 +9,22 @@ import {
 } from "@xyflow/react";
 import type { ArgumentNode, ArgumentNodeData } from "@/types/nodes";
 import { NodeType, NodeStatus } from "@/types/nodes";
-import type { ArgumentEdge, ArgumentEdgeData } from "@/types/edges";
+import type { ArgumentEdge } from "@/types/edges";
 import { EdgeType, EdgeWeight } from "@/types/edges";
 import type { ArgumentGraph } from "@/types/graph";
 import { createNodeData } from "@/lib/nodeDefaults";
 import { layoutGraph } from "@/lib/layoutEngine";
 import { getLoadBearingAssumptions } from "@/analysis/structuralAnalysis";
+import { useSelectionStore } from "./useSelectionStore";
 
 interface ArgumentState {
+  // Graph data
   nodes: ArgumentNode[];
   edges: ArgumentEdge[];
-  selectedNodeId: string | null;
-  selectedEdgeId: string | null;
   graphTitle: string;
   graphDescription: string;
   viewport: Viewport;
   layoutTrigger: number;
-
-  // Highlights (sensitivity analysis)
-  highlightedNodeIds: Set<string>;
-  highlightedEdgeIds: Set<string>;
-  weakestEdgeId: string | null;
-  setHighlights: (nodeIds: string[], edgeIds: string[], weakestEdgeId: string | null) => void;
-  clearHighlights: () => void;
 
   // React Flow integration
   onNodesChange: OnNodesChange<ArgumentNode>;
@@ -50,10 +43,6 @@ interface ArgumentState {
   updateEdgeWeight: (id: string, weight: EdgeWeight | undefined) => void;
   deleteEdge: (id: string) => void;
 
-  // Selection
-  selectNode: (id: string | null) => void;
-  selectEdge: (id: string | null) => void;
-
   // Graph-level
   loadGraph: (graph: ArgumentGraph) => void;
   clearGraph: () => void;
@@ -64,48 +53,29 @@ interface ArgumentState {
   // Layout
   autoLayout: (direction?: "TB" | "LR") => void;
 
-  // Derived
+  // Recomputation (debounced internally)
+  scheduleRecompute: () => void;
   recomputeStatuses: () => void;
 }
 
-let nextId = 1;
 function generateId(): string {
-  return `node_${Date.now()}_${nextId++}`;
+  return `node_${crypto.randomUUID()}`;
 }
 
 function generateEdgeId(): string {
-  return `edge_${Date.now()}_${nextId++}`;
+  return `edge_${crypto.randomUUID()}`;
 }
+
+// Debounce recomputation: batches multiple mutations in the same tick
+let recomputeScheduled = false;
 
 export const useArgumentStore = create<ArgumentState>((set, get) => ({
   nodes: [],
   edges: [],
-  selectedNodeId: null,
-  selectedEdgeId: null,
   graphTitle: "Untitled Argument Map",
   graphDescription: "",
   viewport: { x: 0, y: 0, zoom: 1 },
   layoutTrigger: 0,
-
-  highlightedNodeIds: new Set<string>(),
-  highlightedEdgeIds: new Set<string>(),
-  weakestEdgeId: null,
-
-  setHighlights: (nodeIds, edgeIds, weakestEdgeId) => {
-    set({
-      highlightedNodeIds: new Set(nodeIds),
-      highlightedEdgeIds: new Set(edgeIds),
-      weakestEdgeId,
-    });
-  },
-
-  clearHighlights: () => {
-    set({
-      highlightedNodeIds: new Set<string>(),
-      highlightedEdgeIds: new Set<string>(),
-      weakestEdgeId: null,
-    });
-  },
 
   onNodesChange: (changes) => {
     set({ nodes: applyNodeChanges(changes, get().nodes) });
@@ -130,7 +100,7 @@ export const useArgumentStore = create<ArgumentState>((set, get) => ({
       },
     };
     set({ edges: [...get().edges, newEdge] });
-    get().recomputeStatuses();
+    get().scheduleRecompute();
   },
 
   addNode: (type, position) => {
@@ -159,9 +129,10 @@ export const useArgumentStore = create<ArgumentState>((set, get) => ({
     set({
       nodes: get().nodes.filter((n) => n.id !== id),
       edges: get().edges.filter((e) => e.source !== id && e.target !== id),
-      selectedNodeId: get().selectedNodeId === id ? null : get().selectedNodeId,
     });
-    get().recomputeStatuses();
+    const sel = useSelectionStore.getState();
+    if (sel.selectedNodeId === id) sel.selectNode(null);
+    get().scheduleRecompute();
   },
 
   addEdge: (source, target, edgeType) => {
@@ -177,7 +148,7 @@ export const useArgumentStore = create<ArgumentState>((set, get) => ({
       },
     };
     set({ edges: [...get().edges, newEdge] });
-    get().recomputeStatuses();
+    get().scheduleRecompute();
   },
 
   updateEdgeType: (id, edgeType) => {
@@ -192,7 +163,7 @@ export const useArgumentStore = create<ArgumentState>((set, get) => ({
           : edge
       ),
     });
-    get().recomputeStatuses();
+    get().scheduleRecompute();
   },
 
   updateEdgeNotes: (id, notes) => {
@@ -218,17 +189,10 @@ export const useArgumentStore = create<ArgumentState>((set, get) => ({
   deleteEdge: (id) => {
     set({
       edges: get().edges.filter((e) => e.id !== id),
-      selectedEdgeId: get().selectedEdgeId === id ? null : get().selectedEdgeId,
     });
-    get().recomputeStatuses();
-  },
-
-  selectNode: (id) => {
-    set({ selectedNodeId: id, selectedEdgeId: id ? null : get().selectedEdgeId });
-  },
-
-  selectEdge: (id) => {
-    set({ selectedEdgeId: id, selectedNodeId: id ? null : get().selectedNodeId });
+    const sel = useSelectionStore.getState();
+    if (sel.selectedEdgeId === id) sel.selectEdge(null);
+    get().scheduleRecompute();
   },
 
   loadGraph: (graph) => {
@@ -237,21 +201,23 @@ export const useArgumentStore = create<ArgumentState>((set, get) => ({
       edges: graph.edges,
       graphTitle: graph.title,
       graphDescription: graph.description,
-      selectedNodeId: null,
-      selectedEdgeId: null,
     });
-    get().recomputeStatuses();
+    const sel = useSelectionStore.getState();
+    sel.selectNode(null);
+    sel.selectEdge(null);
+    get().scheduleRecompute();
   },
 
   clearGraph: () => {
     set({
       nodes: [],
       edges: [],
-      selectedNodeId: null,
-      selectedEdgeId: null,
       graphTitle: "Untitled Argument Map",
       graphDescription: "",
     });
+    const sel = useSelectionStore.getState();
+    sel.selectNode(null);
+    sel.selectEdge(null);
   },
 
   setGraphTitle: (title) => set({ graphTitle: title }),
@@ -262,6 +228,15 @@ export const useArgumentStore = create<ArgumentState>((set, get) => ({
     const { nodes, edges, layoutTrigger } = get();
     const layoutedNodes = layoutGraph(nodes, edges, direction);
     set({ nodes: layoutedNodes, layoutTrigger: layoutTrigger + 1 });
+  },
+
+  scheduleRecompute: () => {
+    if (recomputeScheduled) return;
+    recomputeScheduled = true;
+    queueMicrotask(() => {
+      recomputeScheduled = false;
+      get().recomputeStatuses();
+    });
   },
 
   recomputeStatuses: () => {

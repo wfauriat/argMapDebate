@@ -1,16 +1,17 @@
 "use client";
 
 import { useArgumentStore } from "@/store/useArgumentStore";
+import { useSelectionStore } from "@/store/useSelectionStore";
 import { NODE_TYPE_CONFIG } from "@/constants/nodeConfig";
 import { NodeType, type ArgumentNodeData } from "@/types/nodes";
 import { createNodeData } from "@/lib/nodeDefaults";
 
 export default function NodeEditor() {
-  const selectedNodeId = useArgumentStore((s) => s.selectedNodeId);
+  const selectedNodeId = useSelectionStore((s) => s.selectedNodeId);
   const nodes = useArgumentStore((s) => s.nodes);
   const updateNodeData = useArgumentStore((s) => s.updateNodeData);
   const deleteNode = useArgumentStore((s) => s.deleteNode);
-  const selectNode = useArgumentStore((s) => s.selectNode);
+  const selectNode = useSelectionStore((s) => s.selectNode);
 
   const node = nodes.find((n) => n.id === selectedNodeId);
   if (!node || !selectedNodeId) return null;
@@ -56,7 +57,7 @@ export default function NodeEditor() {
         <select
           value={data.nodeType}
           onChange={(e) => handleTypeChange(e.target.value as NodeType)}
-          className="w-full text-sm border border-gray-300 rounded px-2 py-1.5 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-200 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-200"
+          className="w-full text-sm border border-gray-300 rounded px-2 py-1.5 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-200"
         >
           {Object.values(NodeType).map((type) => (
             <option key={type} value={type}>

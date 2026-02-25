@@ -7,14 +7,14 @@ import Toolbar from "@/components/panels/Toolbar";
 import NodeEditor from "@/components/panels/NodeEditor";
 import EdgeEditor from "@/components/panels/EdgeEditor";
 import AnalysisPanel from "@/components/panels/AnalysisPanel";
-import { useArgumentStore } from "@/store/useArgumentStore";
+import { useSelectionStore } from "@/store/useSelectionStore";
 import { useThemeStore } from "@/store/useThemeStore";
 
 type SidebarTab = "inspector" | "analysis";
 
 function Sidebar() {
-  const selectedNodeId = useArgumentStore((s) => s.selectedNodeId);
-  const selectedEdgeId = useArgumentStore((s) => s.selectedEdgeId);
+  const selectedNodeId = useSelectionStore((s) => s.selectedNodeId);
+  const selectedEdgeId = useSelectionStore((s) => s.selectedEdgeId);
   const [activeTab, setActiveTab] = useState<SidebarTab>("analysis");
 
   // Auto-switch to inspector when something is selected
@@ -23,8 +23,6 @@ function Sidebar() {
       setActiveTab("inspector");
     }
   }, [selectedNodeId, selectedEdgeId]);
-
-  const hasSelection = selectedNodeId || selectedEdgeId;
 
   return (
     <div className="w-80 border-l border-gray-200 bg-white dark:bg-gray-900 dark:border-gray-700 flex flex-col">

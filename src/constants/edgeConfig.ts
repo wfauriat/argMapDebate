@@ -5,8 +5,9 @@ export interface EdgeTypeConfig {
   color: string;         // Hex color for stroke
   strokeDasharray?: string;
   animated: boolean;
-  markerEnd: boolean;
-  markerStart: boolean;  // true for double-headed (Contradicts)
+  markerEndId: string;
+  markerStartId?: string;
+  labelColorClass: string;
 }
 
 export interface EdgeWeightConfig {
@@ -26,29 +27,30 @@ export const EDGE_TYPE_CONFIG: Record<EdgeType, EdgeTypeConfig> = {
     label: "Supports",
     color: "#22c55e",      // green-500
     animated: false,
-    markerEnd: true,
-    markerStart: false,
+    markerEndId: "supports-arrow",
+    labelColorClass: "text-green-600",
   },
   [EdgeType.Undermines]: {
     label: "Undermines",
     color: "#ef4444",      // red-500
     animated: false,
-    markerEnd: true,
-    markerStart: false,
+    markerEndId: "undermines-arrow",
+    labelColorClass: "text-red-500",
   },
   [EdgeType.DependsOn]: {
     label: "Depends On",
     color: "#6b7280",      // gray-500
     strokeDasharray: "5 5",
     animated: false,
-    markerEnd: true,
-    markerStart: false,
+    markerEndId: "dependson-arrow",
+    labelColorClass: "text-gray-500 dark:text-gray-400",
   },
   [EdgeType.Contradicts]: {
     label: "Contradicts",
     color: "#dc2626",      // red-600
     animated: false,
-    markerEnd: true,
-    markerStart: true,
+    markerEndId: "contradicts-arrow-end",
+    markerStartId: "contradicts-arrow-start",
+    labelColorClass: "text-red-600",
   },
 };

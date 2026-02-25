@@ -13,10 +13,8 @@ export interface WizardData {
   evidence: string[];
 }
 
-let nextId = 1;
-
 function genId(prefix: string): string {
-  return `wiz_${prefix}_${Date.now()}_${nextId++}`;
+  return `wiz_${prefix}_${crypto.randomUUID()}`;
 }
 
 export function buildGraphFromWizard(data: WizardData): ArgumentGraph {

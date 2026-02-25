@@ -3,7 +3,7 @@
 import { Handle, Position } from "@xyflow/react";
 import { NODE_TYPE_CONFIG } from "@/constants/nodeConfig";
 import { NodeType, NodeStatus } from "@/types/nodes";
-import { useArgumentStore } from "@/store/useArgumentStore";
+import { useHighlightStore } from "@/store/useHighlightStore";
 
 const STATUS_BADGE: Record<NodeStatus, { label: string; className: string }> = {
   [NodeStatus.Supported]: {
@@ -39,8 +39,8 @@ export default function BaseNode({
 }: BaseNodeProps) {
   const config = NODE_TYPE_CONFIG[nodeType];
   const badge = STATUS_BADGE[status];
-  const highlightedNodeIds = useArgumentStore((s) => s.highlightedNodeIds);
-  const isHighlighted = nodeId ? highlightedNodeIds.has(nodeId) : false;
+  // Primitive selector — only re-render when this node's highlight status changes
+  const isHighlighted = useHighlightStore((s) => nodeId ? s.highlightedNodeIds.has(nodeId) : false);
 
   return (
     <div

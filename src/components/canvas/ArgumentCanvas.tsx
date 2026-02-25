@@ -13,6 +13,7 @@ import {
 import "@xyflow/react/dist/style.css";
 
 import { useArgumentStore } from "@/store/useArgumentStore";
+import { useSelectionStore } from "@/store/useSelectionStore";
 import { useThemeStore } from "@/store/useThemeStore";
 import { nodeTypes } from "@/components/nodes";
 import { edgeTypes } from "@/components/edges";
@@ -23,10 +24,10 @@ export default function ArgumentCanvas() {
   const onNodesChange = useArgumentStore((s) => s.onNodesChange);
   const onEdgesChange = useArgumentStore((s) => s.onEdgesChange);
   const onConnect = useArgumentStore((s) => s.onConnect);
-  const selectNode = useArgumentStore((s) => s.selectNode);
-  const selectEdge = useArgumentStore((s) => s.selectEdge);
   const setViewport = useArgumentStore((s) => s.setViewport);
   const layoutTrigger = useArgumentStore((s) => s.layoutTrigger);
+  const selectNode = useSelectionStore((s) => s.selectNode);
+  const selectEdge = useSelectionStore((s) => s.selectEdge);
   const theme = useThemeStore((s) => s.theme);
   const reactFlow = useReactFlow();
   const prevLayoutTrigger = useRef(layoutTrigger);

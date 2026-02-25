@@ -4,10 +4,8 @@ import type { ArgumentNode } from "@/types/nodes";
 import type { ArgumentEdge } from "@/types/edges";
 import { createNodeData } from "@/lib/nodeDefaults";
 
-let nextId = 1;
-
 function generateId(prefix: string): string {
-  return `${prefix}_${Date.now()}_${nextId++}`;
+  return `${prefix}_${crypto.randomUUID()}`;
 }
 
 export function instantiateScheme(scheme: ArgumentationScheme): ArgumentGraph {
