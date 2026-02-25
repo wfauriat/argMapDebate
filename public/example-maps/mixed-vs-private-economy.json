@@ -1,0 +1,325 @@
+{
+  "title": "Mixed vs Privatized Economy Debate",
+  "description": "Should the economy shift toward greater privatization of public services and state enterprises, or maintain a mixed economy with strong public ownership? This map explores the trade-offs.",
+  "nodes": [
+    {
+      "id": "policy-1",
+      "type": "Policy",
+      "position": { "x": 400, "y": 0 },
+      "data": {
+        "nodeType": "Policy",
+        "label": "Privatize major public utilities, transport, and healthcare delivery",
+        "notes": "Broad privatization proposal for state-owned or state-run services",
+        "status": "Contested",
+        "scope": "National"
+      }
+    },
+    {
+      "id": "causal-1",
+      "type": "CausalClaim",
+      "position": { "x": 100, "y": 200 },
+      "data": {
+        "nodeType": "CausalClaim",
+        "label": "Private ownership introduces competition that drives efficiency and innovation",
+        "notes": "Core market-efficiency argument for privatization",
+        "status": "Contested",
+        "mechanism": "Profit motive and competitive pressure incentivize cost reduction and service improvement",
+        "sources": ["Megginson & Netter (2001)"]
+      }
+    },
+    {
+      "id": "evidence-1",
+      "type": "Evidence",
+      "position": { "x": -100, "y": 400 },
+      "data": {
+        "nodeType": "Evidence",
+        "label": "UK telecoms privatization (BT, 1984) led to lower prices and expanded service",
+        "notes": "Widely cited privatization success story",
+        "status": "Unsupported",
+        "sourceType": "study",
+        "citation": "Parker (2009). The Official History of Privatisation. Routledge.",
+        "url": ""
+      }
+    },
+    {
+      "id": "evidence-2",
+      "type": "Evidence",
+      "position": { "x": 100, "y": 400 },
+      "data": {
+        "nodeType": "Evidence",
+        "label": "Chile's pension privatization reduced returns and increased inequality for retirees",
+        "notes": "Privatization failure case study",
+        "status": "Unsupported",
+        "sourceType": "study",
+        "citation": "Mesa-Lago (2008). Reassembling Social Security: A Survey of Pensions and Health Care Reforms.",
+        "url": ""
+      }
+    },
+    {
+      "id": "value-1",
+      "type": "Value",
+      "position": { "x": -200, "y": 400 },
+      "data": {
+        "nodeType": "Value",
+        "label": "Consumer choice and market freedom",
+        "notes": "Liberal economic values supporting private enterprise",
+        "status": "Unsupported",
+        "domain": "Economic"
+      }
+    },
+    {
+      "id": "assumption-1",
+      "type": "Assumption",
+      "position": { "x": -200, "y": 200 },
+      "data": {
+        "nodeType": "Assumption",
+        "label": "Competitive markets will naturally emerge after privatization",
+        "notes": "Often fails for natural monopolies like water and rail",
+        "status": "Contested",
+        "isExplicit": false
+      }
+    },
+    {
+      "id": "causal-2",
+      "type": "CausalClaim",
+      "position": { "x": 700, "y": 200 },
+      "data": {
+        "nodeType": "CausalClaim",
+        "label": "Privatizing natural monopolies creates private monopolies that exploit consumers",
+        "notes": "Market failure argument against privatization",
+        "status": "Supported",
+        "mechanism": "Without competition, private owners maximize profit through higher prices rather than better service",
+        "sources": ["Stiglitz (2008)"]
+      }
+    },
+    {
+      "id": "evidence-3",
+      "type": "Evidence",
+      "position": { "x": 700, "y": 400 },
+      "data": {
+        "nodeType": "Evidence",
+        "label": "UK rail privatization led to higher fares, reduced reliability, and required public bailouts",
+        "notes": "Network Rail was effectively renationalized in 2014",
+        "status": "Unsupported",
+        "sourceType": "study",
+        "citation": "Bowman et al. (2013). The Great Train Robbery: Rail Privatisation and After.",
+        "url": ""
+      }
+    },
+    {
+      "id": "evidence-4",
+      "type": "Evidence",
+      "position": { "x": 500, "y": 400 },
+      "data": {
+        "nodeType": "Evidence",
+        "label": "US healthcare (largely private) costs twice as much per capita as UK's NHS with worse outcomes",
+        "notes": "Private vs public healthcare cost comparison",
+        "status": "Unsupported",
+        "sourceType": "statistic",
+        "citation": "Commonwealth Fund (2023). Mirror, Mirror: International Comparison of Health Systems.",
+        "url": ""
+      }
+    },
+    {
+      "id": "factual-1",
+      "type": "FactualClaim",
+      "position": { "x": 900, "y": 200 },
+      "data": {
+        "nodeType": "FactualClaim",
+        "label": "Mixed economies (Nordic model) consistently rank highest in quality of life indexes",
+        "notes": "Combines market dynamism with public provision",
+        "status": "Supported",
+        "sources": ["UN Human Development Index (2024)", "World Happiness Report (2024)"]
+      }
+    },
+    {
+      "id": "value-2",
+      "type": "Value",
+      "position": { "x": 900, "y": 400 },
+      "data": {
+        "nodeType": "Value",
+        "label": "Universal access to essential services regardless of income",
+        "notes": "Equity and public good values",
+        "status": "Unsupported",
+        "domain": "Social"
+      }
+    },
+    {
+      "id": "causal-3",
+      "type": "CausalClaim",
+      "position": { "x": 300, "y": 400 },
+      "data": {
+        "nodeType": "CausalClaim",
+        "label": "State-owned enterprises can pursue long-term public interest over quarterly profits",
+        "notes": "Strategic planning advantage of public ownership",
+        "status": "Contested",
+        "mechanism": "Public entities can invest in infrastructure and R&D without shareholder pressure for short-term returns",
+        "sources": []
+      }
+    },
+    {
+      "id": "factual-2",
+      "type": "FactualClaim",
+      "position": { "x": 200, "y": 600 },
+      "data": {
+        "nodeType": "FactualClaim",
+        "label": "Privatization often leads to job losses and worse working conditions",
+        "notes": "Labor market effects of ownership transfer",
+        "status": "Supported",
+        "sources": ["Birch & Siemiatycki (2016)"]
+      }
+    },
+    {
+      "id": "assumption-2",
+      "type": "Assumption",
+      "position": { "x": 600, "y": 600 },
+      "data": {
+        "nodeType": "Assumption",
+        "label": "Effective regulation can prevent abuse by private monopolies",
+        "notes": "Assumes regulatory capture doesn't occur",
+        "status": "Contested",
+        "isExplicit": false
+      }
+    },
+    {
+      "id": "factual-3",
+      "type": "FactualClaim",
+      "position": { "x": -100, "y": 600 },
+      "data": {
+        "nodeType": "FactualClaim",
+        "label": "Many privatizations have been reversed: water in Paris, energy in Hamburg, rail in UK",
+        "notes": "Remunicipalisation trend across Europe",
+        "status": "Supported",
+        "sources": ["Kishimoto & Petitjean (2017). Reclaiming Public Services."]
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-1",
+      "source": "causal-1",
+      "target": "policy-1",
+      "type": "Supports",
+      "data": { "edgeType": "Supports", "notes": "Efficiency argument supports privatization" }
+    },
+    {
+      "id": "edge-2",
+      "source": "evidence-1",
+      "target": "causal-1",
+      "type": "Supports",
+      "data": { "edgeType": "Supports", "notes": "BT privatization as success case" }
+    },
+    {
+      "id": "edge-3",
+      "source": "value-1",
+      "target": "policy-1",
+      "type": "Supports",
+      "data": { "edgeType": "Supports", "notes": "Market freedom values align with privatization" }
+    },
+    {
+      "id": "edge-4",
+      "source": "causal-1",
+      "target": "assumption-1",
+      "type": "DependsOn",
+      "data": { "edgeType": "DependsOn", "notes": "Competition benefits require actual competition to emerge" }
+    },
+    {
+      "id": "edge-5",
+      "source": "causal-2",
+      "target": "assumption-1",
+      "type": "Undermines",
+      "data": { "edgeType": "Undermines", "notes": "Natural monopoly problem challenges competition assumption" }
+    },
+    {
+      "id": "edge-6",
+      "source": "causal-2",
+      "target": "policy-1",
+      "type": "Undermines",
+      "data": { "edgeType": "Undermines", "notes": "Private monopoly risk undermines privatization" }
+    },
+    {
+      "id": "edge-7",
+      "source": "evidence-3",
+      "target": "causal-2",
+      "type": "Supports",
+      "data": { "edgeType": "Supports", "notes": "UK rail as private monopoly failure" }
+    },
+    {
+      "id": "edge-8",
+      "source": "evidence-4",
+      "target": "policy-1",
+      "type": "Undermines",
+      "data": { "edgeType": "Undermines", "notes": "Healthcare comparison shows private can be costlier" }
+    },
+    {
+      "id": "edge-9",
+      "source": "evidence-2",
+      "target": "causal-1",
+      "type": "Undermines",
+      "data": { "edgeType": "Undermines", "notes": "Chile pension failure challenges efficiency claim" }
+    },
+    {
+      "id": "edge-10",
+      "source": "factual-1",
+      "target": "policy-1",
+      "type": "Undermines",
+      "data": { "edgeType": "Undermines", "notes": "Mixed economy success challenges full privatization" }
+    },
+    {
+      "id": "edge-11",
+      "source": "value-2",
+      "target": "causal-3",
+      "type": "Supports",
+      "data": { "edgeType": "Supports", "notes": "Universal access values support public ownership" }
+    },
+    {
+      "id": "edge-12",
+      "source": "value-1",
+      "target": "value-2",
+      "type": "Contradicts",
+      "data": { "edgeType": "Contradicts", "notes": "Market freedom vs universal access tension" }
+    },
+    {
+      "id": "edge-13",
+      "source": "causal-3",
+      "target": "policy-1",
+      "type": "Undermines",
+      "data": { "edgeType": "Undermines", "notes": "Public ownership advantages argue against privatization" }
+    },
+    {
+      "id": "edge-14",
+      "source": "factual-2",
+      "target": "policy-1",
+      "type": "Undermines",
+      "data": { "edgeType": "Undermines", "notes": "Job losses are a cost of privatization" }
+    },
+    {
+      "id": "edge-15",
+      "source": "causal-2",
+      "target": "assumption-2",
+      "type": "DependsOn",
+      "data": { "edgeType": "DependsOn", "notes": "Privatization with regulation depends on regulators not being captured" }
+    },
+    {
+      "id": "edge-16",
+      "source": "factual-3",
+      "target": "policy-1",
+      "type": "Undermines",
+      "data": { "edgeType": "Undermines", "notes": "Reversal trend suggests privatization often fails in practice" }
+    },
+    {
+      "id": "edge-17",
+      "source": "factual-3",
+      "target": "causal-1",
+      "type": "Undermines",
+      "data": { "edgeType": "Undermines", "notes": "Remunicipalisation undermines efficiency narrative" }
+    },
+    {
+      "id": "edge-18",
+      "source": "factual-1",
+      "target": "causal-3",
+      "type": "Supports",
+      "data": { "edgeType": "Supports", "notes": "Nordic success supports mixed economy with public ownership" }
+    }
+  ]
+}

@@ -1,0 +1,325 @@
+{
+  "title": "Public Spending Cuts Debate",
+  "description": "Should the government implement significant cuts to public spending to reduce the deficit and national debt? This map explores austerity arguments from both sides.",
+  "nodes": [
+    {
+      "id": "policy-1",
+      "type": "Policy",
+      "position": { "x": 400, "y": 0 },
+      "data": {
+        "nodeType": "Policy",
+        "label": "Cut government spending by 15% across discretionary programs",
+        "notes": "Broad austerity proposal targeting non-entitlement spending",
+        "status": "Contested",
+        "scope": "National"
+      }
+    },
+    {
+      "id": "causal-1",
+      "type": "CausalClaim",
+      "position": { "x": 100, "y": 200 },
+      "data": {
+        "nodeType": "CausalClaim",
+        "label": "Reducing deficits lowers government borrowing costs and frees capital for private investment",
+        "notes": "Crowding-out theory",
+        "status": "Contested",
+        "mechanism": "Less government borrowing reduces competition for capital, lowering interest rates for private sector",
+        "sources": ["Mankiw (2020)"]
+      }
+    },
+    {
+      "id": "evidence-1",
+      "type": "Evidence",
+      "position": { "x": -100, "y": 400 },
+      "data": {
+        "nodeType": "Evidence",
+        "label": "Canada's 1990s austerity cut spending ~20% and preceded strong economic growth",
+        "notes": "Often cited as successful austerity example",
+        "status": "Unsupported",
+        "sourceType": "study",
+        "citation": "Alesina & Ardagna (2010). Large Changes in Fiscal Policy. NBER.",
+        "url": ""
+      }
+    },
+    {
+      "id": "factual-1",
+      "type": "FactualClaim",
+      "position": { "x": -200, "y": 200 },
+      "data": {
+        "nodeType": "FactualClaim",
+        "label": "US national debt exceeds 120% of GDP, the highest since WWII",
+        "notes": "Fiscal sustainability concern",
+        "status": "Supported",
+        "sources": ["CBO Long-Term Budget Outlook (2024)"]
+      }
+    },
+    {
+      "id": "value-1",
+      "type": "Value",
+      "position": { "x": 200, "y": 400 },
+      "data": {
+        "nodeType": "Value",
+        "label": "Fiscal responsibility and intergenerational fairness",
+        "notes": "Not passing debt burden to future generations",
+        "status": "Unsupported",
+        "domain": "Economic"
+      }
+    },
+    {
+      "id": "assumption-1",
+      "type": "Assumption",
+      "position": { "x": -100, "y": 600 },
+      "data": {
+        "nodeType": "Assumption",
+        "label": "Private sector can efficiently replace services currently provided by government",
+        "notes": "Markets-vs-government efficiency assumption",
+        "status": "Contested",
+        "isExplicit": false
+      }
+    },
+    {
+      "id": "causal-2",
+      "type": "CausalClaim",
+      "position": { "x": 700, "y": 200 },
+      "data": {
+        "nodeType": "CausalClaim",
+        "label": "Spending cuts during economic weakness create a contractionary spiral",
+        "notes": "Keynesian counter-argument",
+        "status": "Supported",
+        "mechanism": "Reduced government demand leads to job losses, lower consumer spending, and reduced tax revenue",
+        "sources": ["Blanchard & Leigh (2013)"]
+      }
+    },
+    {
+      "id": "evidence-2",
+      "type": "Evidence",
+      "position": { "x": 700, "y": 400 },
+      "data": {
+        "nodeType": "Evidence",
+        "label": "UK austerity from 2010-2019 slowed recovery and degraded public services",
+        "notes": "NHS wait times doubled, local government funding fell 49%",
+        "status": "Unsupported",
+        "sourceType": "study",
+        "citation": "Fetzer (2019). Did Austerity Cause Brexit? American Economic Review.",
+        "url": ""
+      }
+    },
+    {
+      "id": "evidence-3",
+      "type": "Evidence",
+      "position": { "x": 500, "y": 400 },
+      "data": {
+        "nodeType": "Evidence",
+        "label": "Greek austerity led to 25% GDP contraction and 27% unemployment by 2013",
+        "notes": "Extreme case of contractionary austerity",
+        "status": "Unsupported",
+        "sourceType": "statistic",
+        "citation": "IMF (2013). Greece: Ex Post Evaluation of Exceptional Access.",
+        "url": ""
+      }
+    },
+    {
+      "id": "factual-2",
+      "type": "FactualClaim",
+      "position": { "x": 900, "y": 200 },
+      "data": {
+        "nodeType": "FactualClaim",
+        "label": "Spending cuts disproportionately harm low-income and vulnerable populations",
+        "notes": "Safety-net programs are often first to be cut",
+        "status": "Supported",
+        "sources": ["CBPP (2023). Policy Basics: Non-Defense Discretionary Programs."]
+      }
+    },
+    {
+      "id": "value-2",
+      "type": "Value",
+      "position": { "x": 900, "y": 400 },
+      "data": {
+        "nodeType": "Value",
+        "label": "Social safety net and protection of the most vulnerable",
+        "notes": "Welfare state values",
+        "status": "Unsupported",
+        "domain": "Social"
+      }
+    },
+    {
+      "id": "causal-3",
+      "type": "CausalClaim",
+      "position": { "x": 300, "y": 600 },
+      "data": {
+        "nodeType": "CausalClaim",
+        "label": "Targeted efficiency reforms can reduce waste without cutting services",
+        "notes": "Middle-ground approach to fiscal consolidation",
+        "status": "Contested",
+        "mechanism": "Modernization, digitization, and process improvement reduce costs while maintaining outputs",
+        "sources": []
+      }
+    },
+    {
+      "id": "factual-3",
+      "type": "FactualClaim",
+      "position": { "x": 100, "y": 600 },
+      "data": {
+        "nodeType": "FactualClaim",
+        "label": "Government multiplier effect means $1 cut reduces GDP by $1.50 during recessions",
+        "notes": "Fiscal multiplier research",
+        "status": "Contested",
+        "sources": ["Ramey (2019). Ten Years After the Financial Crisis."]
+      }
+    },
+    {
+      "id": "assumption-2",
+      "type": "Assumption",
+      "position": { "x": 400, "y": 400 },
+      "data": {
+        "nodeType": "Assumption",
+        "label": "High debt levels will eventually trigger a fiscal crisis or credit downgrade",
+        "notes": "Implicit assumption behind urgency of spending cuts",
+        "status": "Contested",
+        "isExplicit": false
+      }
+    },
+    {
+      "id": "evidence-4",
+      "type": "Evidence",
+      "position": { "x": 600, "y": 600 },
+      "data": {
+        "nodeType": "Evidence",
+        "label": "Japan sustains 260% debt-to-GDP ratio without fiscal crisis due to domestic bond market",
+        "notes": "Counter-example to debt crisis narrative",
+        "status": "Unsupported",
+        "sourceType": "statistic",
+        "citation": "IMF World Economic Outlook (2024). Japan fiscal data.",
+        "url": ""
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-1",
+      "source": "causal-1",
+      "target": "policy-1",
+      "type": "Supports",
+      "data": { "edgeType": "Supports", "notes": "Crowding-out theory supports spending cuts" }
+    },
+    {
+      "id": "edge-2",
+      "source": "evidence-1",
+      "target": "causal-1",
+      "type": "Supports",
+      "data": { "edgeType": "Supports", "notes": "Canada's 1990s experience supports the claim" }
+    },
+    {
+      "id": "edge-3",
+      "source": "factual-1",
+      "target": "policy-1",
+      "type": "Supports",
+      "data": { "edgeType": "Supports", "notes": "High debt level motivates action" }
+    },
+    {
+      "id": "edge-4",
+      "source": "factual-1",
+      "target": "assumption-2",
+      "type": "Supports",
+      "data": { "edgeType": "Supports", "notes": "High debt reinforces crisis assumption" }
+    },
+    {
+      "id": "edge-5",
+      "source": "value-1",
+      "target": "policy-1",
+      "type": "Supports",
+      "data": { "edgeType": "Supports", "notes": "Fiscal responsibility values align with spending cuts" }
+    },
+    {
+      "id": "edge-6",
+      "source": "causal-1",
+      "target": "assumption-1",
+      "type": "DependsOn",
+      "data": { "edgeType": "DependsOn", "notes": "Private investment benefits assume private sector can fill gaps" }
+    },
+    {
+      "id": "edge-7",
+      "source": "causal-2",
+      "target": "policy-1",
+      "type": "Undermines",
+      "data": { "edgeType": "Undermines", "notes": "Contractionary spiral argument against cuts" }
+    },
+    {
+      "id": "edge-8",
+      "source": "evidence-2",
+      "target": "causal-2",
+      "type": "Supports",
+      "data": { "edgeType": "Supports", "notes": "UK austerity confirms contractionary effects" }
+    },
+    {
+      "id": "edge-9",
+      "source": "evidence-3",
+      "target": "causal-2",
+      "type": "Supports",
+      "data": { "edgeType": "Supports", "notes": "Greek austerity as extreme contractionary case" }
+    },
+    {
+      "id": "edge-10",
+      "source": "factual-2",
+      "target": "policy-1",
+      "type": "Undermines",
+      "data": { "edgeType": "Undermines", "notes": "Distributional harm undermines the policy" }
+    },
+    {
+      "id": "edge-11",
+      "source": "value-2",
+      "target": "factual-2",
+      "type": "Supports",
+      "data": { "edgeType": "Supports", "notes": "Safety net values motivate concern about harm to vulnerable" }
+    },
+    {
+      "id": "edge-12",
+      "source": "value-1",
+      "target": "value-2",
+      "type": "Contradicts",
+      "data": { "edgeType": "Contradicts", "notes": "Tension between fiscal prudence and social protection" }
+    },
+    {
+      "id": "edge-13",
+      "source": "causal-3",
+      "target": "policy-1",
+      "type": "Undermines",
+      "data": { "edgeType": "Undermines", "notes": "Efficiency reforms as alternative to blunt cuts" }
+    },
+    {
+      "id": "edge-14",
+      "source": "factual-3",
+      "target": "causal-2",
+      "type": "Supports",
+      "data": { "edgeType": "Supports", "notes": "High multiplier amplifies contractionary effects" }
+    },
+    {
+      "id": "edge-15",
+      "source": "evidence-4",
+      "target": "assumption-2",
+      "type": "Undermines",
+      "data": { "edgeType": "Undermines", "notes": "Japan counter-example weakens crisis assumption" }
+    },
+    {
+      "id": "edge-16",
+      "source": "policy-1",
+      "target": "assumption-2",
+      "type": "DependsOn",
+      "data": { "edgeType": "DependsOn", "notes": "Urgency of cuts depends on crisis being imminent" }
+    },
+    {
+      "id": "edge-17",
+      "source": "evidence-2",
+      "target": "factual-2",
+      "type": "Supports",
+      "data": { "edgeType": "Supports", "notes": "UK evidence shows service degradation harming vulnerable" }
+    },
+    {
+      "id": "edge-18",
+      "source": "evidence-1",
+      "target": "causal-2",
+      "type": "Undermines",
+      "data": { "edgeType": "Undermines", "notes": "Canada success challenges contractionary spiral claim" }
+    }
+  ]
+}

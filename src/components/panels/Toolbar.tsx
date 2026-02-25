@@ -6,11 +6,12 @@ import { useReactFlow } from "@xyflow/react";
 import { NodeType } from "@/types/nodes";
 import { NODE_TYPE_CONFIG } from "@/constants/nodeConfig";
 import { exportGraph, importGraph } from "@/lib/serialization";
-import { loadExampleMap } from "@/lib/exampleMaps";
+import { loadExampleMap, EXAMPLE_MAPS } from "@/lib/exampleMaps";
 import { useThemeStore } from "@/store/useThemeStore";
 
 export default function Toolbar() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [exampleDropdownOpen, setExampleDropdownOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const addNode = useArgumentStore((s) => s.addNode);
   const clearGraph = useArgumentStore((s) => s.clearGraph);
@@ -62,10 +63,11 @@ export default function Toolbar() {
     e.target.value = "";
   };
 
-  const handleLoadExample = async () => {
+  const handleLoadExample = async (name: string) => {
     try {
-      const graph = await loadExampleMap("carbon-tax");
+      const graph = await loadExampleMap(name);
       loadGraph(graph);
+      setExampleDropdownOpen(false);
     } catch (err) {
       alert("Failed to load example: " + (err as Error).message);
     }
@@ -131,12 +133,30 @@ export default function Toolbar() {
         className="hidden"
       />
 
-      <button
-        onClick={handleLoadExample}
-        className="px-3 py-1.5 text-sm text-gray-700 border border-gray-300 rounded hover:bg-gray-50 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700"
-      >
-        Load Example
-      </button>
+      <div className="relative">
+        <button
+          onClick={() => setExampleDropdownOpen(!exampleDropdownOpen)}
+          className="px-3 py-1.5 text-sm text-gray-700 border border-gray-300 rounded hover:bg-gray-50 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700"
+        >
+          Load Example ▾
+        </button>
+        {exampleDropdownOpen && (
+          <>
+            <div className="fixed inset-0 z-10" onClick={() => setExampleDropdownOpen(false)} />
+            <div className="absolute left-0 top-full mt-1 z-20 bg-white border border-gray-200 rounded-lg shadow-lg py-1 w-56 dark:bg-gray-800 dark:border-gray-600">
+              {EXAMPLE_MAPS.map((example) => (
+                <button
+                  key={example.id}
+                  onClick={() => handleLoadExample(example.id)}
+                  className="w-full text-left px-3 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 dark:text-gray-200"
+                >
+                  {example.label}
+                </button>
+              ))}
+            </div>
+          </>
+        )}
+      </div>
 
       <button
         onClick={() => autoLayout()}
