@@ -1,5 +1,7 @@
 "use client";
 
+import { useCallback, useRef } from "react";
+import { useReactFlow } from "@xyflow/react";
 import { useArgumentStore } from "@/store/useArgumentStore";
 import {
   getUnsupportedClaims,
@@ -12,6 +14,9 @@ import { NODE_TYPE_CONFIG } from "@/constants/nodeConfig";
 import { EDGE_WEIGHT_CONFIG } from "@/constants/edgeConfig";
 import type { ArgumentNodeData } from "@/types/nodes";
 
+const NODE_WIDTH = 256;
+const NODE_HEIGHT = 120;
+
 export default function AnalysisPanel() {
   const nodes = useArgumentStore((s) => s.nodes);
   const edges = useArgumentStore((s) => s.edges);
@@ -19,6 +24,31 @@ export default function AnalysisPanel() {
   const setHighlights = useArgumentStore((s) => s.setHighlights);
   const clearHighlights = useArgumentStore((s) => s.clearHighlights);
   const highlightedNodeIds = useArgumentStore((s) => s.highlightedNodeIds);
+  const reactFlow = useReactFlow();
+  const highlightTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const focusNode = useCallback((nodeId: string) => {
+    const node = nodes.find((n) => n.id === nodeId);
+    if (!node) return;
+
+    // Select the node (opens inspector)
+    selectNode(nodeId);
+
+    // Center canvas on the node
+    reactFlow.setCenter(
+      node.position.x + NODE_WIDTH / 2,
+      node.position.y + NODE_HEIGHT / 2,
+      { zoom: 1, duration: 400 },
+    );
+
+    // Briefly highlight the node
+    if (highlightTimerRef.current) clearTimeout(highlightTimerRef.current);
+    setHighlights([nodeId], [], null);
+    highlightTimerRef.current = setTimeout(() => {
+      clearHighlights();
+      highlightTimerRef.current = null;
+    }, 2000);
+  }, [nodes, selectNode, reactFlow, setHighlights, clearHighlights]);
 
   if (nodes.length === 0) {
     return (
@@ -93,7 +123,7 @@ export default function AnalysisPanel() {
             {unsupported.map((node) => (
               <button
                 key={node.id}
-                onClick={() => selectNode(node.id)}
+                onClick={() => focusNode(node.id)}
                 className="w-full text-left text-xs p-2 rounded hover:bg-yellow-50 border border-yellow-100 text-gray-700 dark:text-gray-300 dark:border-yellow-900 dark:hover:bg-yellow-950"
               >
                 {(node.data as ArgumentNodeData).label}
@@ -115,7 +145,7 @@ export default function AnalysisPanel() {
             {isolated.map((node) => (
               <button
                 key={node.id}
-                onClick={() => selectNode(node.id)}
+                onClick={() => focusNode(node.id)}
                 className="w-full text-left text-xs p-2 rounded hover:bg-orange-50 border border-orange-100 text-gray-700 dark:text-gray-300 dark:border-orange-900 dark:hover:bg-orange-950"
               >
                 {(node.data as ArgumentNodeData).label}
@@ -137,7 +167,7 @@ export default function AnalysisPanel() {
             {loadBearing.map((lb) => (
               <button
                 key={lb.nodeId}
-                onClick={() => selectNode(lb.nodeId)}
+                onClick={() => focusNode(lb.nodeId)}
                 className="w-full text-left text-xs p-2 rounded hover:bg-red-50 border border-red-100 text-gray-700 dark:text-gray-300 dark:border-red-900 dark:hover:bg-red-950"
               >
                 <span className="font-medium">{lb.label}</span>
