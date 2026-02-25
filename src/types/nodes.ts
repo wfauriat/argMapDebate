@@ -22,6 +22,8 @@ interface BaseNodeData {
   label: string;
   notes: string;
   status: NodeStatus;
+  credence?: number | null; // User-supplied prior (0–1), null = unset
+  posterior?: number | null; // Computed by inference engine, null = not computed
 }
 
 export interface FactualClaimData extends BaseNodeData {

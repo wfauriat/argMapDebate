@@ -4,6 +4,7 @@ import { useArgumentStore } from "@/store/useArgumentStore";
 import { useSelectionStore } from "@/store/useSelectionStore";
 import { EdgeType, EdgeWeight } from "@/types/edges";
 import { EDGE_TYPE_CONFIG, EDGE_WEIGHT_CONFIG } from "@/constants/edgeConfig";
+import CredenceSlider from "@/components/controls/CredenceSlider";
 
 export default function EdgeEditor() {
   const selectedEdgeId = useSelectionStore((s) => s.selectedEdgeId);
@@ -12,6 +13,7 @@ export default function EdgeEditor() {
   const updateEdgeType = useArgumentStore((s) => s.updateEdgeType);
   const updateEdgeNotes = useArgumentStore((s) => s.updateEdgeNotes);
   const updateEdgeWeight = useArgumentStore((s) => s.updateEdgeWeight);
+  const updateEdgeStrength = useArgumentStore((s) => s.updateEdgeStrength);
   const deleteEdge = useArgumentStore((s) => s.deleteEdge);
   const selectEdge = useSelectionStore((s) => s.selectEdge);
 
@@ -99,6 +101,12 @@ export default function EdgeEditor() {
           })}
         </div>
       </div>
+
+      <CredenceSlider
+        label="Strength"
+        value={edge.data?.strength}
+        onChange={(v) => updateEdgeStrength(selectedEdgeId, v)}
+      />
 
       <div className="text-xs text-gray-500 dark:text-gray-400 space-y-1">
         <p>

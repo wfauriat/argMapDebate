@@ -5,6 +5,7 @@ import { useSelectionStore } from "@/store/useSelectionStore";
 import { NODE_TYPE_CONFIG } from "@/constants/nodeConfig";
 import { NodeType, type ArgumentNodeData } from "@/types/nodes";
 import { createNodeData } from "@/lib/nodeDefaults";
+import CredenceSlider from "@/components/controls/CredenceSlider";
 
 export default function NodeEditor() {
   const selectedNodeId = useSelectionStore((s) => s.selectedNodeId);
@@ -91,6 +92,17 @@ export default function NodeEditor() {
         <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Status</label>
         <span className="text-sm text-gray-700 dark:text-gray-300">{data.status}</span>
         <p className="text-xs text-gray-400 mt-0.5">Auto-computed from edges</p>
+      </div>
+
+      <CredenceSlider
+        label="Credence"
+        value={data.credence}
+        onChange={(v) => update({ credence: v })}
+      />
+
+      <div>
+        <CredenceSlider label="Posterior" value={data.posterior} readOnly />
+        <p className="text-xs text-gray-400 mt-0.5">Computed by inference engine</p>
       </div>
 
       {/* Type-specific fields */}

@@ -139,6 +139,33 @@ describe("useArgumentStore", () => {
     });
   });
 
+  describe("updateEdgeStrength", () => {
+    it("sets strength on an edge", () => {
+      const store = useArgumentStore.getState();
+      store.addNode(NodeType.FactualClaim, { x: 0, y: 0 });
+      store.addNode(NodeType.Evidence, { x: 100, y: 0 });
+      const ids = useArgumentStore.getState().nodes.map((n) => n.id);
+      useArgumentStore.getState().addEdge(ids[1], ids[0], EdgeType.Supports);
+      const edgeId = useArgumentStore.getState().edges[0].id;
+
+      useArgumentStore.getState().updateEdgeStrength(edgeId, 0.8);
+      expect(useArgumentStore.getState().edges[0].data?.strength).toBe(0.8);
+    });
+
+    it("clears strength by setting to null", () => {
+      const store = useArgumentStore.getState();
+      store.addNode(NodeType.FactualClaim, { x: 0, y: 0 });
+      store.addNode(NodeType.Evidence, { x: 100, y: 0 });
+      const ids = useArgumentStore.getState().nodes.map((n) => n.id);
+      useArgumentStore.getState().addEdge(ids[1], ids[0], EdgeType.Supports);
+      const edgeId = useArgumentStore.getState().edges[0].id;
+
+      useArgumentStore.getState().updateEdgeStrength(edgeId, 0.5);
+      useArgumentStore.getState().updateEdgeStrength(edgeId, null);
+      expect(useArgumentStore.getState().edges[0].data?.strength).toBeNull();
+    });
+  });
+
   // --- Graph-level ---
 
   describe("loadGraph", () => {

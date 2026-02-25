@@ -18,6 +18,7 @@ export interface ArgumentEdgeData {
   edgeType: EdgeType;
   notes: string;
   weight?: EdgeWeight;
+  strength?: number | null; // Numeric influence magnitude (0–1), null = unset
 }
 
 export type ArgumentEdge = Edge<ArgumentEdgeData, string>;

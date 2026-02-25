@@ -30,6 +30,14 @@ describe("createNodeData", () => {
     }
   });
 
+  it("all node types default credence and posterior to null", () => {
+    for (const type of allTypes) {
+      const data = createNodeData(type);
+      expect(data.credence).toBeNull();
+      expect(data.posterior).toBeNull();
+    }
+  });
+
   it("FactualClaim has sources array", () => {
     const data = createNodeData(NodeType.FactualClaim) as FactualClaimData;
     expect(data.nodeType).toBe(NodeType.FactualClaim);

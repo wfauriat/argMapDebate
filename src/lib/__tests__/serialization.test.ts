@@ -123,4 +123,50 @@ describe("importGraph", () => {
     expect(graph.title).toBe("Imported Map");
     expect(graph.description).toBe("");
   });
+
+  it("imports graph without credence/posterior/strength (backward compat)", () => {
+    const json = exportGraph(makeTestGraph());
+    const graph = importGraph(json);
+    // Fields are normalized to null when absent
+    expect(graph.nodes[0].data.credence).toBeNull();
+    expect(graph.nodes[0].data.posterior).toBeNull();
+  });
+
+  it("imports graph with credence and posterior values", () => {
+    const g = makeTestGraph();
+    (g.nodes[0].data as Record<string, unknown>).credence = 0.7;
+    (g.nodes[0].data as Record<string, unknown>).posterior = 0.85;
+    const json = exportGraph(g);
+    const graph = importGraph(json);
+    expect(graph.nodes[0].data.credence).toBe(0.7);
+    expect(graph.nodes[0].data.posterior).toBe(0.85);
+  });
+
+  it("clamps out-of-range credence/strength to [0,1]", () => {
+    const g = makeTestGraph();
+    (g.nodes[0].data as Record<string, unknown>).credence = 1.5;
+    (g.nodes[1].data as Record<string, unknown>).credence = -0.3;
+    (g.edges[0].data as Record<string, unknown>).strength = 2.0;
+    const json = exportGraph(g);
+    const graph = importGraph(json);
+    expect(graph.nodes[0].data.credence).toBe(1);
+    expect(graph.nodes[1].data.credence).toBe(0);
+    expect(graph.edges[0].data!.strength).toBe(1);
+  });
+
+  it("nullifies non-numeric credence", () => {
+    const g = makeTestGraph();
+    (g.nodes[0].data as Record<string, unknown>).credence = "not a number";
+    const json = exportGraph(g);
+    const graph = importGraph(json);
+    expect(graph.nodes[0].data.credence).toBeNull();
+  });
+
+  it("imports edge with strength", () => {
+    const g = makeTestGraph();
+    (g.edges[0].data as Record<string, unknown>).strength = 0.6;
+    const json = exportGraph(g);
+    const graph = importGraph(json);
+    expect(graph.edges[0].data!.strength).toBe(0.6);
+  });
 });

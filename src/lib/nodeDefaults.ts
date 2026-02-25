@@ -14,6 +14,8 @@ const baseDefaults = {
   label: "",
   notes: "",
   status: NodeStatus.Unsupported,
+  credence: null,
+  posterior: null,
 };
 
 export function createNodeData(nodeType: NodeType): ArgumentNodeData {

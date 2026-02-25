@@ -1,5 +1,12 @@
 import type { ArgumentGraph } from "@/types/graph";
 
+/** Clamp a value to [0,1], returning null for missing/non-numeric values. */
+function normalizeZeroOne(value: unknown): number | null {
+  if (value === undefined || value === null) return null;
+  if (typeof value !== "number" || isNaN(value)) return null;
+  return Math.max(0, Math.min(1, value));
+}
+
 export function exportGraph(graph: ArgumentGraph): string {
   return JSON.stringify(graph, null, 2);
 }
@@ -32,6 +39,18 @@ export function importGraph(json: string): ArgumentGraph {
   for (const edge of parsed.edges) {
     if (!edge.id || !edge.source || !edge.target) {
       throw new Error(`Invalid edge: missing id, source, or target`);
+    }
+  }
+
+  // Normalize Bayesian inference fields
+  for (const node of parsed.nodes) {
+    node.data.credence = normalizeZeroOne(node.data.credence);
+    node.data.posterior = normalizeZeroOne(node.data.posterior);
+  }
+
+  for (const edge of parsed.edges) {
+    if (edge.data) {
+      edge.data.strength = normalizeZeroOne(edge.data.strength);
     }
   }
 

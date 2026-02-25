@@ -41,6 +41,7 @@ interface ArgumentState {
   updateEdgeType: (id: string, edgeType: EdgeType) => void;
   updateEdgeNotes: (id: string, notes: string) => void;
   updateEdgeWeight: (id: string, weight: EdgeWeight | undefined) => void;
+  updateEdgeStrength: (id: string, strength: number | null) => void;
   deleteEdge: (id: string) => void;
 
   // Graph-level
@@ -181,6 +182,16 @@ export const useArgumentStore = create<ArgumentState>((set, get) => ({
       edges: get().edges.map((edge) =>
         edge.id === id
           ? { ...edge, data: { ...edge.data!, weight } }
+          : edge
+      ),
+    });
+  },
+
+  updateEdgeStrength: (id, strength) => {
+    set({
+      edges: get().edges.map((edge) =>
+        edge.id === id
+          ? { ...edge, data: { ...edge.data!, strength } }
           : edge
       ),
     });
