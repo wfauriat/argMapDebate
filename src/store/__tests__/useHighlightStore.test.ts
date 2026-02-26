@@ -20,16 +20,27 @@ describe("useHighlightStore", () => {
     expect(state.weakestEdgeId).toBe("e2");
   });
 
+  it("setHighlights with weakestNodeId", () => {
+    useHighlightStore
+      .getState()
+      .setHighlights(["n1", "n2"], ["e1"], null, "n1");
+
+    const state = useHighlightStore.getState();
+    expect(state.weakestEdgeId).toBeNull();
+    expect(state.weakestNodeId).toBe("n1");
+  });
+
   it("clearHighlights resets all", () => {
     useHighlightStore
       .getState()
-      .setHighlights(["n1"], ["e1"], "e1");
+      .setHighlights(["n1"], ["e1"], "e1", "n1");
     useHighlightStore.getState().clearHighlights();
 
     const state = useHighlightStore.getState();
     expect(state.highlightedNodeIds.size).toBe(0);
     expect(state.highlightedEdgeIds.size).toBe(0);
     expect(state.weakestEdgeId).toBeNull();
+    expect(state.weakestNodeId).toBeNull();
   });
 
   it("setHighlights replaces previous highlights", () => {

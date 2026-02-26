@@ -55,14 +55,15 @@ export default function BaseNode({
 }: BaseNodeProps) {
   const config = NODE_TYPE_CONFIG[nodeType];
   const badge = STATUS_BADGE[status];
-  // Primitive selector — only re-render when this node's highlight status changes
+  // Primitive selectors — only re-render when this node's highlight status changes
   const isHighlighted = useHighlightStore((s) => nodeId ? s.highlightedNodeIds.has(nodeId) : false);
+  const isWeakest = useHighlightStore((s) => nodeId ? s.weakestNodeId === nodeId : false);
 
   return (
     <div
       className={`w-64 rounded-lg border-2 bg-white shadow-md dark:bg-gray-800 dark:shadow-lg dark:shadow-black/30 ${config.color} ${
         selected ? "ring-2 ring-blue-400 ring-offset-1 dark:ring-offset-gray-900" : ""
-      } ${isHighlighted ? "ring-2 ring-amber-400 ring-offset-1 dark:ring-offset-gray-900" : ""}`}
+      } ${isWeakest ? "ring-2 ring-red-500 ring-offset-1 dark:ring-offset-gray-900" : isHighlighted ? "ring-2 ring-amber-400 ring-offset-1 dark:ring-offset-gray-900" : ""}`}
     >
       <Handle type="target" position={Position.Top} className="!bg-gray-400 dark:!bg-gray-500 !w-3 !h-3" />
 

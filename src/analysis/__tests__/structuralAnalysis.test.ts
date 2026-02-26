@@ -13,7 +13,7 @@ import { EdgeType, EdgeWeight } from "@/types/edges";
 
 // --- Helpers ---
 
-function makeNode(id: string, type: NodeType): ArgumentNode {
+function makeNode(id: string, type: NodeType, credence?: number | null): ArgumentNode {
   return {
     id,
     type,
@@ -23,6 +23,7 @@ function makeNode(id: string, type: NodeType): ArgumentNode {
       label: id,
       notes: "",
       status: NodeStatus.Unsupported,
+      ...(credence !== undefined ? { credence } : {}),
     } as ArgumentNode["data"],
   };
 }
@@ -32,14 +33,15 @@ function makeEdge(
   source: string,
   target: string,
   edgeType: EdgeType,
-  weight?: EdgeWeight
+  weight?: EdgeWeight,
+  strength?: number | null
 ): ArgumentEdge {
   return {
     id,
     source,
     target,
     type: edgeType,
-    data: { edgeType, notes: "", weight },
+    data: { edgeType, notes: "", weight, ...(strength !== undefined ? { strength } : {}) },
   };
 }
 
@@ -292,6 +294,10 @@ describe("getSensitivityAnalysis", () => {
     ];
     const result = getSensitivityAnalysis(nodes, edges);
     expect(result).not.toBeNull();
+    expect(result!.weakestLink).not.toBeNull();
+    expect(result!.weakestLink!.kind).toBe("edge");
+    expect(result!.weakestLink!.id).toBe("e2");
+    // Backward compat
     expect(result!.weakestEdgeId).toBe("e2");
     expect(result!.weakestEdgeWeight).toBe(EdgeWeight.Weak);
   });
@@ -308,7 +314,81 @@ describe("getSensitivityAnalysis", () => {
     ];
     const result = getSensitivityAnalysis(nodes, edges);
     expect(result).not.toBeNull();
-    // Weak (1) < Moderate (2), so e1 is weakest
-    expect(result!.weakestEdgeId).toBe("e1");
+    // Weak (0.33) < Moderate (0.67), so e1 is weakest
+    expect(result!.weakestLink!.kind).toBe("edge");
+    expect(result!.weakestLink!.id).toBe("e1");
+  });
+
+  it("numerical strength overrides categorical weight", () => {
+    const nodes = [
+      makeNode("a", NodeType.Evidence),
+      makeNode("b", NodeType.FactualClaim),
+      makeNode("c", NodeType.Policy),
+    ];
+    const edges = [
+      // Categorical "Strong" but numerical strength is very low
+      makeEdge("e1", "a", "b", EdgeType.Supports, EdgeWeight.Strong, 0.1),
+      makeEdge("e2", "b", "c", EdgeType.Supports, undefined, 0.9),
+    ];
+    const result = getSensitivityAnalysis(nodes, edges);
+    expect(result).not.toBeNull();
+    expect(result!.weakestLink!.kind).toBe("edge");
+    expect(result!.weakestLink!.id).toBe("e1");
+    expect(result!.weakestLink!.effectiveStrength).toBeCloseTo(0.1);
+  });
+
+  it("low-credence node is identified as weakest link", () => {
+    const nodes = [
+      makeNode("a", NodeType.Evidence, 0.9),
+      makeNode("b", NodeType.Assumption, 0.1),  // very low credence
+      makeNode("c", NodeType.Policy, 0.8),
+    ];
+    const edges = [
+      makeEdge("e1", "a", "b", EdgeType.Supports, undefined, 0.8),
+      makeEdge("e2", "b", "c", EdgeType.Supports, undefined, 0.8),
+    ];
+    const result = getSensitivityAnalysis(nodes, edges);
+    expect(result).not.toBeNull();
+    expect(result!.weakestLink!.kind).toBe("node");
+    expect(result!.weakestLink!.id).toBe("b");
+    expect(result!.weakestLink!.effectiveStrength).toBe(0.1);
+    expect(result!.weakestLink!.reason).toContain("credence");
+    // Backward compat: weakestEdgeId should be null when weakest is a node
+    expect(result!.weakestEdgeId).toBeNull();
+  });
+
+  it("nodes without credence are not considered as weakest links", () => {
+    const nodes = [
+      makeNode("a", NodeType.Evidence),  // no credence
+      makeNode("b", NodeType.FactualClaim),  // no credence
+      makeNode("c", NodeType.Policy),  // no credence
+    ];
+    const edges = [
+      makeEdge("e1", "a", "b", EdgeType.Supports, undefined, 0.3),
+      makeEdge("e2", "b", "c", EdgeType.Supports, undefined, 0.9),
+    ];
+    const result = getSensitivityAnalysis(nodes, edges);
+    expect(result).not.toBeNull();
+    // Only edges are candidates, so weakest is e1 with strength 0.3
+    expect(result!.weakestLink!.kind).toBe("edge");
+    expect(result!.weakestLink!.id).toBe("e1");
+  });
+
+  it("compares edge strength and node credence on same scale", () => {
+    const nodes = [
+      makeNode("a", NodeType.Evidence, 0.8),
+      makeNode("b", NodeType.FactualClaim, 0.5),
+      makeNode("c", NodeType.Policy, 0.7),
+    ];
+    const edges = [
+      makeEdge("e1", "a", "b", EdgeType.Supports, undefined, 0.6),
+      makeEdge("e2", "b", "c", EdgeType.Supports, undefined, 0.9),
+    ];
+    const result = getSensitivityAnalysis(nodes, edges);
+    expect(result).not.toBeNull();
+    // Candidates: node a=0.8, node b=0.5, node c=0.7, edge e1=0.6, edge e2=0.9
+    // Weakest is node b with credence 0.5
+    expect(result!.weakestLink!.kind).toBe("node");
+    expect(result!.weakestLink!.id).toBe("b");
   });
 });

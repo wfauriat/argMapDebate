@@ -13,7 +13,6 @@ import {
   getSensitivityAnalysis,
 } from "@/analysis/structuralAnalysis";
 import { NODE_TYPE_CONFIG } from "@/constants/nodeConfig";
-import { EDGE_WEIGHT_CONFIG } from "@/constants/edgeConfig";
 import type { ArgumentNodeData } from "@/types/nodes";
 
 const NODE_WIDTH = 256;
@@ -189,14 +188,19 @@ export default function AnalysisPanel() {
           <div className="space-y-2">
             <p className="text-xs text-gray-600 dark:text-gray-400">
               Longest support chain: {sensitivity.chainLength} nodes
-              {sensitivity.weakestEdgeWeight && (
-                <>, weakest edge: <span className="font-medium text-amber-600">{EDGE_WEIGHT_CONFIG[sensitivity.weakestEdgeWeight].label}</span></>
+              {sensitivity.weakestLink && (
+                <>, weakest {sensitivity.weakestLink.kind}: <span className={`font-medium ${sensitivity.weakestLink.kind === "node" ? "text-red-500" : "text-amber-600"}`}>{sensitivity.weakestLink.reason}</span></>
               )}
             </p>
             <div className="flex gap-2">
               {!hasHighlights ? (
                 <button
-                  onClick={() => setHighlights(sensitivity.chainNodeIds, sensitivity.chainEdgeIds, sensitivity.weakestEdgeId)}
+                  onClick={() => setHighlights(
+                    sensitivity.chainNodeIds,
+                    sensitivity.chainEdgeIds,
+                    sensitivity.weakestLink?.kind === "edge" ? sensitivity.weakestLink.id : null,
+                    sensitivity.weakestLink?.kind === "node" ? sensitivity.weakestLink.id : null,
+                  )}
                   className="text-xs px-2 py-1 rounded bg-amber-100 text-amber-700 hover:bg-amber-200 dark:bg-amber-900 dark:text-amber-300 dark:hover:bg-amber-800"
                 >
                   Show weakest link

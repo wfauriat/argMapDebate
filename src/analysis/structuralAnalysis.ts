@@ -184,22 +184,56 @@ export function getLoadBearingAssumptions(
 
 // --- Sensitivity Analysis (Weakest Link) ---
 
+export interface WeakestLink {
+  /** "node" if a low-credence node is the weakest, "edge" if an edge is. */
+  kind: "node" | "edge";
+  id: string;
+  /** Effective strength (0–1) used for comparison. */
+  effectiveStrength: number;
+  /** Human-readable reason, e.g. "credence 0.15" or "strength 0.2 (Weak)". */
+  reason: string;
+}
+
 export interface SensitivityResult {
   chainNodeIds: string[];
   chainEdgeIds: string[];
+  weakestLink: WeakestLink | null;
+  /** @deprecated Use weakestLink instead. Kept for backward compat. */
   weakestEdgeId: string | null;
+  /** @deprecated Use weakestLink instead. */
   weakestEdgeWeight: EdgeWeight | undefined;
   chainLength: number;
 }
 
 /**
- * Finds the longest support chain and highlights the weakest edge in it.
+ * Compute effective strength for an edge (0–1 scale).
+ * Prefers numerical `strength` when set; falls back to categorical `weight`
+ * mapped to 0–1, then defaults to 0.5.
+ */
+function edgeEffectiveStrength(edge: ArgumentEdge): number {
+  // Numerical strength takes priority
+  if (edge.data?.strength != null) return edge.data.strength;
+  // Fall back to categorical weight
+  const w = edge.data?.weight as EdgeWeight | undefined;
+  if (w) {
+    // Strong=1.0, Moderate=0.5, Weak=0.25
+    return EDGE_WEIGHT_CONFIG[w].numericValue / EDGE_WEIGHT_CONFIG[EdgeWeight.Strong].numericValue;
+  }
+  return 0.5; // default: moderate
+}
+
+/**
+ * Finds the longest support chain and highlights the weakest link — either
+ * a low-credence node or a weak edge.
  */
 export function getSensitivityAnalysis(
   nodes: ArgumentNode[],
   edges: ArgumentEdge[]
 ): SensitivityResult | null {
   if (nodes.length === 0 || edges.length === 0) return null;
+
+  const nodeMap = new Map<string, ArgumentNode>();
+  for (const n of nodes) nodeMap.set(n.id, n);
 
   // Build adjacency following only Supports edges
   const supportAdj = new Map<string, { target: string; edgeId: string }[]>();
@@ -249,30 +283,57 @@ export function getSensitivityAnalysis(
 
   if (bestPath.length <= 1) return null;
 
-  // Find the weakest edge in the chain
-  let weakestEdgeId: string | null = null;
-  let weakestWeight: EdgeWeight | undefined = undefined;
-  let weakestNumeric = Infinity;
+  // Find the weakest link — compare edges AND nodes on a 0–1 scale
+  let weakest: WeakestLink | null = null;
 
+  // Check edges
   for (const edgeId of bestEdges) {
     const edge = edgeMap.get(edgeId);
     if (!edge) continue;
-    const w = edge.data?.weight as EdgeWeight | undefined;
-    const numeric = w
-      ? EDGE_WEIGHT_CONFIG[w].numericValue
-      : EDGE_WEIGHT_CONFIG[EdgeWeight.Moderate].numericValue;
-    if (numeric < weakestNumeric) {
-      weakestNumeric = numeric;
-      weakestEdgeId = edgeId;
-      weakestWeight = w;
+    const eff = edgeEffectiveStrength(edge);
+    if (!weakest || eff < weakest.effectiveStrength) {
+      const w = edge.data?.weight as EdgeWeight | undefined;
+      const label = w ? ` (${EDGE_WEIGHT_CONFIG[w].label})` : "";
+      weakest = {
+        kind: "edge",
+        id: edgeId,
+        effectiveStrength: eff,
+        reason: `strength ${eff.toFixed(2)}${label}`,
+      };
     }
+  }
+
+  // Check nodes — credence acts as a link strength
+  for (const nodeId of bestPath) {
+    const node = nodeMap.get(nodeId);
+    if (!node) continue;
+    const cred = (node.data as ArgumentNodeData).credence;
+    if (cred == null) continue; // no credence set → can't evaluate
+    if (!weakest || cred < weakest.effectiveStrength) {
+      weakest = {
+        kind: "node",
+        id: nodeId,
+        effectiveStrength: cred,
+        reason: `credence ${cred.toFixed(2)}`,
+      };
+    }
+  }
+
+  // Backward-compat: extract legacy fields from weakest link
+  let weakestEdgeId: string | null = null;
+  let weakestEdgeWeight: EdgeWeight | undefined = undefined;
+  if (weakest?.kind === "edge") {
+    weakestEdgeId = weakest.id;
+    const edge = edgeMap.get(weakest.id);
+    weakestEdgeWeight = edge?.data?.weight as EdgeWeight | undefined;
   }
 
   return {
     chainNodeIds: bestPath,
     chainEdgeIds: bestEdges,
+    weakestLink: weakest,
     weakestEdgeId,
-    weakestEdgeWeight: weakestWeight,
+    weakestEdgeWeight,
     chainLength: bestPath.length,
   };
 }
