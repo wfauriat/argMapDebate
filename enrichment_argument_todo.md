@@ -239,6 +239,54 @@ implicit *warrant* (the Supports edge). Toulmin's full model has two missing ele
 
 ---
 
+## G. LLM-Assisted Features
+
+The `aiGenerate.ts` / `AIGenerateModal` infrastructure already solves the core
+design challenge: prompting the LLM to return structured JSON matching the graph
+schema. All features below reuse that pattern — the work is prompt engineering
+and UI entry points, not new infrastructure.
+
+**Already built:**
+- Full map generation from a topic/prompt
+
+### Low effort (reuse existing infrastructure directly)
+
+- [ ] **Steelman generator** — given the current map, ask the LLM to generate the
+  strongest possible counter-argument branch and inject it as new nodes/edges.
+  Adversarial and targeted at the current argument's weaknesses.
+- [ ] **Gap filler** — select an Unsupported claim, ask the LLM to suggest Evidence
+  or FactualClaim nodes that would support it, previewed before inserting.
+- [ ] **Critical question prompts** — given a selected node or detected scheme, ask
+  the LLM to list the 3–5 most important challenges to address. Complements the
+  static checklist approach from scheme templates.
+- [ ] **Label / notes drafting** — given a node type and brief user context, draft
+  the label and notes fields as a starting point.
+- [ ] **Assumption surfacer** — feed the current map to the LLM and ask it to
+  identify implicit assumptions not yet present as nodes. Returns candidate
+  Assumption nodes for the user to accept or discard.
+
+### Medium effort
+
+- [ ] **Map-to-text** — convert the current graph structure into coherent prose:
+  a structured summary, policy brief, or debate speech. Traverses the graph
+  in topological order and asks the LLM to narrate the argument chain.
+- [ ] **Argument diagnosis** — feed the full map and ask "what are the three weakest
+  points in this argument?" Complements the structural analysis panel with
+  semantic judgment the algorithm cannot make (e.g. a claim may be structurally
+  Supported but its evidence nodes are low-quality).
+- [ ] **Credence suggestions** — given a claim and its connected evidence nodes,
+  ask the LLM to suggest a reasonable prior credence based on world knowledge,
+  with a brief rationale. Presented as a suggestion, not an automatic assignment.
+
+### Design note
+
+The key tension throughout: LLM outputs are unstructured text; the map needs
+typed nodes and edges. The existing JSON schema prompting in `aiGenerate.ts`
+already handles this. New features follow the same pattern: define the expected
+output schema, prompt accordingly, validate and preview before applying to the store.
+
+---
+
 ## Key References
 
 - Toulmin, S. (1958). *The Uses of Argument*. Cambridge University Press.
