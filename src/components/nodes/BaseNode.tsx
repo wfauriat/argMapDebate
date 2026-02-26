@@ -20,11 +20,25 @@ const STATUS_BADGE: Record<NodeStatus, { label: string; className: string }> = {
   },
 };
 
+function posteriorColor(p: number): string {
+  if (p >= 0.7) return "text-green-700 dark:text-green-400";
+  if (p >= 0.4) return "text-amber-600 dark:text-amber-400";
+  return "text-red-600 dark:text-red-400";
+}
+
+function posteriorBgColor(p: number): string {
+  if (p >= 0.7) return "bg-green-500";
+  if (p >= 0.4) return "bg-amber-500";
+  return "bg-red-500";
+}
+
 interface BaseNodeProps {
   nodeId?: string;
   nodeType: NodeType;
   label: string;
   status: NodeStatus;
+  credence?: number | null;
+  posterior?: number | null;
   selected?: boolean;
   children?: React.ReactNode;
 }
@@ -34,6 +48,8 @@ export default function BaseNode({
   nodeType,
   label,
   status,
+  credence,
+  posterior,
   selected,
   children,
 }: BaseNodeProps) {
@@ -66,6 +82,36 @@ export default function BaseNode({
         <p className="text-sm font-medium text-gray-900 dark:text-gray-100 leading-snug">{label}</p>
         {children}
       </div>
+
+      {(credence != null || posterior != null) && (
+        <div className="px-3 pb-2 pt-0.5">
+          <div className="flex items-center gap-2 text-[11px]">
+            {credence != null && (
+              <span className="text-gray-400 dark:text-gray-500">
+                Prior: {credence.toFixed(2)}
+              </span>
+            )}
+            {posterior != null && (
+              <>
+                {credence != null && (
+                  <span className="text-gray-300 dark:text-gray-600">→</span>
+                )}
+                <span className={`font-semibold ${posteriorColor(posterior)}`}>
+                  Post: {posterior.toFixed(2)}
+                </span>
+              </>
+            )}
+          </div>
+          {posterior != null && (
+            <div className="mt-1 h-1 w-full bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+              <div
+                className={`h-full rounded-full transition-all ${posteriorBgColor(posterior)}`}
+                style={{ width: `${posterior * 100}%` }}
+              />
+            </div>
+          )}
+        </div>
+      )}
 
       <Handle type="source" position={Position.Bottom} className="!bg-gray-400 dark:!bg-gray-500 !w-3 !h-3" />
     </div>

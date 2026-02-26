@@ -8,7 +8,7 @@ import { NodeType, type AssumptionData } from "@/types/nodes";
 function AssumptionNode({ id, data, selected }: NodeProps) {
   const d = data as unknown as AssumptionData;
   return (
-    <BaseNode nodeId={id} nodeType={NodeType.Assumption} label={d.label} status={d.status} selected={selected}>
+    <BaseNode nodeId={id} nodeType={NodeType.Assumption} label={d.label} status={d.status} credence={d.credence} posterior={d.posterior} selected={selected}>
       <div className="flex items-center gap-1 mt-1 flex-wrap">
         <span
           className={`inline-block text-xs px-1.5 py-0.5 rounded ${

@@ -70,6 +70,19 @@ function generateEdgeId(): string {
 // Debounce recomputation: batches multiple mutations in the same tick
 let recomputeScheduled = false;
 
+/** Null out all posteriors — called when graph structure or inference inputs change. */
+function clearPosteriors(nodes: ArgumentNode[]): ArgumentNode[] {
+  let changed = false;
+  const result = nodes.map((node) => {
+    if (node.data.posterior != null) {
+      changed = true;
+      return { ...node, data: { ...node.data, posterior: null } };
+    }
+    return node;
+  });
+  return changed ? result : nodes;
+}
+
 export const useArgumentStore = create<ArgumentState>((set, get) => ({
   nodes: [],
   edges: [],
@@ -100,7 +113,7 @@ export const useArgumentStore = create<ArgumentState>((set, get) => ({
         notes: "",
       },
     };
-    set({ edges: [...get().edges, newEdge] });
+    set({ nodes: clearPosteriors(get().nodes), edges: [...get().edges, newEdge] });
     get().scheduleRecompute();
   },
 
@@ -117,18 +130,23 @@ export const useArgumentStore = create<ArgumentState>((set, get) => ({
   },
 
   updateNodeData: (id, partial) => {
-    set({
-      nodes: get().nodes.map((node) =>
-        node.id === id
-          ? { ...node, data: { ...node.data, ...partial } as ArgumentNodeData }
-          : node
-      ),
-    });
+    let nodes = get().nodes.map((node) =>
+      node.id === id
+        ? { ...node, data: { ...node.data, ...partial } as ArgumentNodeData }
+        : node
+    );
+    // Clear posteriors when credence changes (inference input), but not
+    // when posterior itself is being set (inference result coming in).
+    if ("credence" in partial && !("posterior" in partial)) {
+      nodes = clearPosteriors(nodes);
+    }
+    set({ nodes });
   },
 
   deleteNode: (id) => {
+    const nodes = clearPosteriors(get().nodes.filter((n) => n.id !== id));
     set({
-      nodes: get().nodes.filter((n) => n.id !== id),
+      nodes,
       edges: get().edges.filter((e) => e.source !== id && e.target !== id),
     });
     const sel = useSelectionStore.getState();
@@ -148,12 +166,13 @@ export const useArgumentStore = create<ArgumentState>((set, get) => ({
         notes: "",
       },
     };
-    set({ edges: [...get().edges, newEdge] });
+    set({ nodes: clearPosteriors(get().nodes), edges: [...get().edges, newEdge] });
     get().scheduleRecompute();
   },
 
   updateEdgeType: (id, edgeType) => {
     set({
+      nodes: clearPosteriors(get().nodes),
       edges: get().edges.map((edge) =>
         edge.id === id
           ? {
@@ -189,6 +208,7 @@ export const useArgumentStore = create<ArgumentState>((set, get) => ({
 
   updateEdgeStrength: (id, strength) => {
     set({
+      nodes: clearPosteriors(get().nodes),
       edges: get().edges.map((edge) =>
         edge.id === id
           ? { ...edge, data: { ...edge.data!, strength } }
@@ -199,6 +219,7 @@ export const useArgumentStore = create<ArgumentState>((set, get) => ({
 
   deleteEdge: (id) => {
     set({
+      nodes: clearPosteriors(get().nodes),
       edges: get().edges.filter((e) => e.id !== id),
     });
     const sel = useSelectionStore.getState();

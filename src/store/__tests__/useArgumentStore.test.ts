@@ -217,6 +217,122 @@ describe("useArgumentStore", () => {
     });
   });
 
+  // --- Posterior auto-clearing ---
+
+  describe("clearPosteriors", () => {
+    /** Helper: set up two nodes with posteriors and a support edge. */
+    function setupWithPosteriors() {
+      const store = useArgumentStore.getState();
+      store.addNode(NodeType.Evidence, { x: 0, y: 0 });
+      store.addNode(NodeType.FactualClaim, { x: 100, y: 0 });
+      const ids = useArgumentStore.getState().nodes.map((n) => n.id);
+      store.addEdge(ids[0], ids[1], EdgeType.Supports);
+      // Simulate inference results
+      store.updateNodeData(ids[0], { posterior: 0.85 });
+      store.updateNodeData(ids[1], { posterior: 0.72 });
+      return ids;
+    }
+
+    it("setting posterior does NOT clear other posteriors", () => {
+      const store = useArgumentStore.getState();
+      store.addNode(NodeType.Evidence, { x: 0, y: 0 });
+      store.addNode(NodeType.FactualClaim, { x: 100, y: 0 });
+      const ids = useArgumentStore.getState().nodes.map((n) => n.id);
+      store.updateNodeData(ids[0], { posterior: 0.85 });
+      store.updateNodeData(ids[1], { posterior: 0.72 });
+      const nodes = useArgumentStore.getState().nodes;
+      expect(nodes[0].data.posterior).toBe(0.85);
+      expect(nodes[1].data.posterior).toBe(0.72);
+    });
+
+    it("changing credence clears all posteriors", () => {
+      const ids = setupWithPosteriors();
+      useArgumentStore.getState().updateNodeData(ids[0], { credence: 0.6 });
+      const nodes = useArgumentStore.getState().nodes;
+      expect(nodes.every((n) => n.data.posterior == null)).toBe(true);
+    });
+
+    it("adding an edge clears all posteriors", async () => {
+      const ids = setupWithPosteriors();
+      // Add a third node and edge
+      useArgumentStore.getState().addNode(NodeType.Evidence, { x: 200, y: 0 });
+      const newId = useArgumentStore.getState().nodes[2].id;
+      useArgumentStore.getState().addEdge(newId, ids[1], EdgeType.Supports);
+      await flushMicrotasks();
+      const nodes = useArgumentStore.getState().nodes;
+      expect(nodes.every((n) => n.data.posterior == null)).toBe(true);
+    });
+
+    it("deleting an edge clears all posteriors", async () => {
+      const ids = setupWithPosteriors();
+      const edgeId = useArgumentStore.getState().edges[0].id;
+      useArgumentStore.getState().deleteEdge(edgeId);
+      await flushMicrotasks();
+      const nodes = useArgumentStore.getState().nodes;
+      expect(nodes.every((n) => n.data.posterior == null)).toBe(true);
+    });
+
+    it("deleting a node clears all posteriors", async () => {
+      const ids = setupWithPosteriors();
+      useArgumentStore.getState().deleteNode(ids[0]);
+      await flushMicrotasks();
+      const nodes = useArgumentStore.getState().nodes;
+      expect(nodes.every((n) => n.data.posterior == null)).toBe(true);
+    });
+
+    it("changing edge type clears all posteriors", async () => {
+      const ids = setupWithPosteriors();
+      const edgeId = useArgumentStore.getState().edges[0].id;
+      useArgumentStore.getState().updateEdgeType(edgeId, EdgeType.Undermines);
+      await flushMicrotasks();
+      const nodes = useArgumentStore.getState().nodes;
+      expect(nodes.every((n) => n.data.posterior == null)).toBe(true);
+    });
+
+    it("changing edge strength clears all posteriors", () => {
+      const ids = setupWithPosteriors();
+      const edgeId = useArgumentStore.getState().edges[0].id;
+      useArgumentStore.getState().updateEdgeStrength(edgeId, 0.3);
+      const nodes = useArgumentStore.getState().nodes;
+      expect(nodes.every((n) => n.data.posterior == null)).toBe(true);
+    });
+
+    it("loadGraph does NOT clear posteriors from loaded data", () => {
+      const graph: ArgumentGraph = {
+        title: "Test",
+        description: "",
+        nodes: [
+          {
+            id: "n1",
+            type: NodeType.Evidence,
+            position: { x: 0, y: 0 },
+            data: {
+              nodeType: NodeType.Evidence,
+              label: "E",
+              notes: "",
+              status: NodeStatus.Unsupported,
+              sourceType: "study",
+              citation: "",
+              url: "",
+              posterior: 0.9,
+            },
+          },
+        ],
+        edges: [],
+      };
+      useArgumentStore.getState().loadGraph(graph);
+      expect(useArgumentStore.getState().nodes[0].data.posterior).toBe(0.9);
+    });
+
+    it("updating notes does NOT clear posteriors", () => {
+      const ids = setupWithPosteriors();
+      useArgumentStore.getState().updateNodeData(ids[0], { notes: "updated" });
+      const nodes = useArgumentStore.getState().nodes;
+      expect(nodes[0].data.posterior).toBe(0.85);
+      expect(nodes[1].data.posterior).toBe(0.72);
+    });
+  });
+
   // --- Status recomputation ---
 
   describe("recomputeStatuses", () => {
