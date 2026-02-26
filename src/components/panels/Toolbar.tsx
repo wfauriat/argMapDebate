@@ -9,6 +9,7 @@ import { exportGraph, importGraph } from "@/lib/serialization";
 import { loadExampleMap, EXAMPLE_MAPS } from "@/lib/exampleMaps";
 import { useThemeStore } from "@/store/useThemeStore";
 import AIGenerateButton from "./AIGenerateButton";
+import InferenceButton from "./InferenceButton";
 import WizardButton from "./WizardButton";
 import { ARGUMENTATION_SCHEMES } from "@/templates/argumentSchemes";
 import { instantiateScheme } from "@/templates/instantiateScheme";
@@ -158,6 +159,8 @@ export default function Toolbar() {
       <WizardButton />
 
       <AIGenerateButton />
+
+      <InferenceButton />
 
       <div className="h-6 w-px bg-gray-200 dark:bg-gray-700" />
 

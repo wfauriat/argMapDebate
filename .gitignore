@@ -42,3 +42,9 @@ next-env.d.ts
 
 
 .testKey
+
+# python
+__pycache__/
+*.pyc
+backend/.venv/
+backend/*.egg-info/
