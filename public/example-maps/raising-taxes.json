@@ -5,32 +5,45 @@
     {
       "id": "policy-1",
       "type": "Policy",
-      "position": { "x": 400, "y": 0 },
+      "position": {
+        "x": 400,
+        "y": 0
+      },
       "data": {
         "nodeType": "Policy",
         "label": "Raise top income tax rate to 50% and corporate tax to 28%",
         "notes": "Primary fiscal policy proposal under debate",
         "status": "Contested",
-        "scope": "National"
+        "scope": "National",
+        "posterior": 0.654871
       }
     },
     {
       "id": "causal-1",
       "type": "CausalClaim",
-      "position": { "x": 100, "y": 200 },
+      "position": {
+        "x": 100,
+        "y": 200
+      },
       "data": {
         "nodeType": "CausalClaim",
         "label": "Higher taxes generate revenue to fund healthcare, education, and infrastructure",
         "notes": "Core mechanism for expanded public services",
         "status": "Supported",
         "mechanism": "Increased marginal rates broaden fiscal capacity for social investment",
-        "sources": ["CBO Revenue Projections (2024)"]
+        "sources": [
+          "CBO Revenue Projections (2024)"
+        ],
+        "posterior": 0.488886
       }
     },
     {
       "id": "evidence-1",
       "type": "Evidence",
-      "position": { "x": -100, "y": 400 },
+      "position": {
+        "x": -100,
+        "y": 400
+      },
       "data": {
         "nodeType": "Evidence",
         "label": "Nordic countries with 50%+ top rates maintain strong public services and high living standards",
@@ -38,13 +51,17 @@
         "status": "Unsupported",
         "sourceType": "statistic",
         "citation": "OECD Revenue Statistics (2023). Tax-to-GDP ratios across member nations.",
-        "url": ""
+        "url": "",
+        "posterior": 0.5
       }
     },
     {
       "id": "evidence-2",
       "type": "Evidence",
-      "position": { "x": 100, "y": 400 },
+      "position": {
+        "x": 100,
+        "y": 400
+      },
       "data": {
         "nodeType": "Evidence",
         "label": "US top marginal rate was 91% in the 1950s during strong economic growth",
@@ -52,62 +69,86 @@
         "status": "Unsupported",
         "sourceType": "statistic",
         "citation": "Tax Policy Center. Historical Highest Marginal Income Tax Rates.",
-        "url": ""
+        "url": "",
+        "posterior": 0.5
       }
     },
     {
       "id": "value-1",
       "type": "Value",
-      "position": { "x": 300, "y": 400 },
+      "position": {
+        "x": 300,
+        "y": 400
+      },
       "data": {
         "nodeType": "Value",
         "label": "Reducing inequality and ensuring equal opportunity",
         "notes": "Social justice and fairness as guiding principle",
         "status": "Unsupported",
-        "domain": "Social"
+        "domain": "Social",
+        "posterior": 0.554113
       }
     },
     {
       "id": "factual-1",
       "type": "FactualClaim",
-      "position": { "x": -200, "y": 200 },
+      "position": {
+        "x": -200,
+        "y": 200
+      },
       "data": {
         "nodeType": "FactualClaim",
         "label": "The wealthiest 1% hold more wealth than the bottom 50% combined",
         "notes": "Wealth concentration data",
         "status": "Supported",
-        "sources": ["Federal Reserve Distributional Financial Accounts (2023)"]
+        "sources": [
+          "Federal Reserve Distributional Financial Accounts (2023)"
+        ],
+        "posterior": 0.5
       }
     },
     {
       "id": "assumption-1",
       "type": "Assumption",
-      "position": { "x": -100, "y": 600 },
+      "position": {
+        "x": -100,
+        "y": 600
+      },
       "data": {
         "nodeType": "Assumption",
         "label": "Tax revenue will be spent efficiently on intended programs",
         "notes": "Assumes effective government allocation",
         "status": "Unsupported",
-        "isExplicit": false
+        "isExplicit": false,
+        "posterior": 0.5
       }
     },
     {
       "id": "causal-2",
       "type": "CausalClaim",
-      "position": { "x": 700, "y": 200 },
+      "position": {
+        "x": 700,
+        "y": 200
+      },
       "data": {
         "nodeType": "CausalClaim",
         "label": "Higher corporate taxes reduce business investment and slow job creation",
         "notes": "Supply-side economics argument",
         "status": "Contested",
         "mechanism": "Reduced after-tax returns lower incentive to invest in expansion and hiring",
-        "sources": ["Barro & Furman (2018)"]
+        "sources": [
+          "Barro & Furman (2018)"
+        ],
+        "posterior": 0.438003
       }
     },
     {
       "id": "evidence-3",
       "type": "Evidence",
-      "position": { "x": 700, "y": 400 },
+      "position": {
+        "x": 700,
+        "y": 400
+      },
       "data": {
         "nodeType": "Evidence",
         "label": "US 2017 corporate tax cut from 35% to 21% did not produce promised investment surge",
@@ -115,74 +156,104 @@
         "status": "Unsupported",
         "sourceType": "study",
         "citation": "Hanlon, Hoopes & Slemrod (2019). Tax Reform Made Me Do It.",
-        "url": ""
+        "url": "",
+        "posterior": 0.5
       }
     },
     {
       "id": "factual-2",
       "type": "FactualClaim",
-      "position": { "x": 900, "y": 200 },
+      "position": {
+        "x": 900,
+        "y": 200
+      },
       "data": {
         "nodeType": "FactualClaim",
         "label": "Higher income taxes may incentivize tax avoidance and capital flight",
         "notes": "Behavioral response to tax rate increases",
         "status": "Contested",
-        "sources": ["Saez, Slemrod & Giertz (2012)"]
+        "sources": [
+          "Saez, Slemrod & Giertz (2012)"
+        ],
+        "posterior": 0.348307
       }
     },
     {
       "id": "causal-3",
       "type": "CausalClaim",
-      "position": { "x": 500, "y": 400 },
+      "position": {
+        "x": 500,
+        "y": 400
+      },
       "data": {
         "nodeType": "CausalClaim",
         "label": "Progressive taxation funds social mobility programs that boost long-run growth",
         "notes": "Public investment in human capital argument",
         "status": "Supported",
         "mechanism": "Education and healthcare spending creates more productive workforce",
-        "sources": ["IMF Fiscal Monitor (2017)"]
+        "sources": [
+          "IMF Fiscal Monitor (2017)"
+        ],
+        "posterior": 0.5
       }
     },
     {
       "id": "value-2",
       "type": "Value",
-      "position": { "x": 900, "y": 400 },
+      "position": {
+        "x": 900,
+        "y": 400
+      },
       "data": {
         "nodeType": "Value",
         "label": "Individual economic freedom and property rights",
         "notes": "Libertarian and free-market perspective",
         "status": "Unsupported",
-        "domain": "Economic"
+        "domain": "Economic",
+        "posterior": 0.435979
       }
     },
     {
       "id": "factual-3",
       "type": "FactualClaim",
-      "position": { "x": 200, "y": 600 },
+      "position": {
+        "x": 200,
+        "y": 600
+      },
       "data": {
         "nodeType": "FactualClaim",
         "label": "Effective tax rates for the wealthy are far below statutory rates due to loopholes",
         "notes": "Distinction between marginal and effective rates",
         "status": "Supported",
-        "sources": ["ProPublica Tax Records Investigation (2021)"]
+        "sources": [
+          "ProPublica Tax Records Investigation (2021)"
+        ],
+        "posterior": 0.5
       }
     },
     {
       "id": "assumption-2",
       "type": "Assumption",
-      "position": { "x": 700, "y": 600 },
+      "position": {
+        "x": 700,
+        "y": 600
+      },
       "data": {
         "nodeType": "Assumption",
         "label": "Capital and high earners are sufficiently mobile to relocate based on tax rates",
         "notes": "Assumption underlying the capital flight argument",
         "status": "Contested",
-        "isExplicit": false
+        "isExplicit": false,
+        "posterior": 0.445887
       }
     },
     {
       "id": "evidence-4",
       "type": "Evidence",
-      "position": { "x": 500, "y": 600 },
+      "position": {
+        "x": 500,
+        "y": 600
+      },
       "data": {
         "nodeType": "Evidence",
         "label": "Stanford study found only 0.04% of top earners relocated after California tax hikes",
@@ -190,7 +261,8 @@
         "status": "Unsupported",
         "sourceType": "study",
         "citation": "Young et al. (2016). Millionaire Migration and Taxation of the Elite.",
-        "url": ""
+        "url": "",
+        "posterior": 0.5
       }
     }
   ],
@@ -200,126 +272,180 @@
       "source": "causal-1",
       "target": "policy-1",
       "type": "Supports",
-      "data": { "edgeType": "Supports", "notes": "Revenue generation supports the policy" }
+      "data": {
+        "edgeType": "Supports",
+        "notes": "Revenue generation supports the policy"
+      }
     },
     {
       "id": "edge-2",
       "source": "evidence-1",
       "target": "causal-1",
       "type": "Supports",
-      "data": { "edgeType": "Supports", "notes": "Nordic example shows high taxes can coexist with prosperity" }
+      "data": {
+        "edgeType": "Supports",
+        "notes": "Nordic example shows high taxes can coexist with prosperity"
+      }
     },
     {
       "id": "edge-3",
       "source": "evidence-2",
       "target": "causal-1",
       "type": "Supports",
-      "data": { "edgeType": "Supports", "notes": "Historical US precedent for high rates during growth" }
+      "data": {
+        "edgeType": "Supports",
+        "notes": "Historical US precedent for high rates during growth"
+      }
     },
     {
       "id": "edge-4",
       "source": "value-1",
       "target": "policy-1",
       "type": "Supports",
-      "data": { "edgeType": "Supports", "notes": "Equality values align with progressive taxation" }
+      "data": {
+        "edgeType": "Supports",
+        "notes": "Equality values align with progressive taxation"
+      }
     },
     {
       "id": "edge-5",
       "source": "factual-1",
       "target": "value-1",
       "type": "Supports",
-      "data": { "edgeType": "Supports", "notes": "Wealth concentration motivates inequality concerns" }
+      "data": {
+        "edgeType": "Supports",
+        "notes": "Wealth concentration motivates inequality concerns"
+      }
     },
     {
       "id": "edge-6",
       "source": "causal-1",
       "target": "assumption-1",
       "type": "DependsOn",
-      "data": { "edgeType": "DependsOn", "notes": "Revenue benefits assume competent spending" }
+      "data": {
+        "edgeType": "DependsOn",
+        "notes": "Revenue benefits assume competent spending"
+      }
     },
     {
       "id": "edge-7",
       "source": "causal-2",
       "target": "policy-1",
       "type": "Undermines",
-      "data": { "edgeType": "Undermines", "notes": "Investment reduction argument against tax hikes" }
+      "data": {
+        "edgeType": "Undermines",
+        "notes": "Investment reduction argument against tax hikes"
+      }
     },
     {
       "id": "edge-8",
       "source": "evidence-3",
       "target": "causal-2",
       "type": "Undermines",
-      "data": { "edgeType": "Undermines", "notes": "TCJA evidence weakens investment-reduction claim" }
+      "data": {
+        "edgeType": "Undermines",
+        "notes": "TCJA evidence weakens investment-reduction claim"
+      }
     },
     {
       "id": "edge-9",
       "source": "factual-2",
       "target": "policy-1",
       "type": "Undermines",
-      "data": { "edgeType": "Undermines", "notes": "Avoidance risk undermines policy effectiveness" }
+      "data": {
+        "edgeType": "Undermines",
+        "notes": "Avoidance risk undermines policy effectiveness"
+      }
     },
     {
       "id": "edge-10",
       "source": "factual-2",
       "target": "assumption-2",
       "type": "DependsOn",
-      "data": { "edgeType": "DependsOn", "notes": "Capital flight claim depends on mobility assumption" }
+      "data": {
+        "edgeType": "DependsOn",
+        "notes": "Capital flight claim depends on mobility assumption"
+      }
     },
     {
       "id": "edge-11",
       "source": "evidence-4",
       "target": "assumption-2",
       "type": "Undermines",
-      "data": { "edgeType": "Undermines", "notes": "Low migration rates challenge mobility assumption" }
+      "data": {
+        "edgeType": "Undermines",
+        "notes": "Low migration rates challenge mobility assumption"
+      }
     },
     {
       "id": "edge-12",
       "source": "causal-3",
       "target": "policy-1",
       "type": "Supports",
-      "data": { "edgeType": "Supports", "notes": "Long-run growth through human capital investment" }
+      "data": {
+        "edgeType": "Supports",
+        "notes": "Long-run growth through human capital investment"
+      }
     },
     {
       "id": "edge-13",
       "source": "value-2",
       "target": "causal-2",
       "type": "Supports",
-      "data": { "edgeType": "Supports", "notes": "Economic freedom values underpin investment concerns" }
+      "data": {
+        "edgeType": "Supports",
+        "notes": "Economic freedom values underpin investment concerns"
+      }
     },
     {
       "id": "edge-14",
       "source": "value-1",
       "target": "value-2",
       "type": "Contradicts",
-      "data": { "edgeType": "Contradicts", "notes": "Tension between equality and economic freedom" }
+      "data": {
+        "edgeType": "Contradicts",
+        "notes": "Tension between equality and economic freedom"
+      }
     },
     {
       "id": "edge-15",
       "source": "factual-3",
       "target": "factual-2",
       "type": "Undermines",
-      "data": { "edgeType": "Undermines", "notes": "If effective rates are already low, statutory increases may just close loopholes" }
+      "data": {
+        "edgeType": "Undermines",
+        "notes": "If effective rates are already low, statutory increases may just close loopholes"
+      }
     },
     {
       "id": "edge-16",
       "source": "factual-3",
       "target": "policy-1",
       "type": "Supports",
-      "data": { "edgeType": "Supports", "notes": "Low effective rates justify raising statutory rates" }
+      "data": {
+        "edgeType": "Supports",
+        "notes": "Low effective rates justify raising statutory rates"
+      }
     },
     {
       "id": "edge-17",
       "source": "factual-1",
       "target": "policy-1",
       "type": "Supports",
-      "data": { "edgeType": "Supports", "notes": "Extreme concentration justifies redistribution" }
+      "data": {
+        "edgeType": "Supports",
+        "notes": "Extreme concentration justifies redistribution"
+      }
     },
     {
       "id": "edge-18",
       "source": "causal-3",
       "target": "causal-2",
       "type": "Undermines",
-      "data": { "edgeType": "Undermines", "notes": "Long-run growth benefits counter short-run investment concerns" }
+      "data": {
+        "edgeType": "Undermines",
+        "notes": "Long-run growth benefits counter short-run investment concerns"
+      }
     }
   ]
 }

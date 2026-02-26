@@ -3,8 +3,8 @@
 ## High priority
 
 - [x] **Display posteriors in node UI** — Show computed posterior next to credence in node cards (color-coded bar or badge). Without this, "Run Inference" has no visible effect.
-- [ ] **Tune inference scale factors** — Current SUPPORT/UNDERMINE_SCALE (2.0) may be too aggressive. Test with multiple debate maps and adjust. Revisit the "absence penalty" for support edges.
-- [ ] **Unified dev experience** — Add docker-compose or npm script that starts both Next.js and FastAPI in one command.
+- [x] **Tune inference scale factors** — Reduced scales from 2.0 to 1.2 (support/undermine/contradict), 3.0 to 2.0 (DependsOn). Added ABSENCE_PENALTY_FACTOR (0.25, was hardcoded 0.5). Updated all example map posteriors.
+- [x] **Unified dev experience** — `npm run dev:full` starts Next.js + FastAPI together. `npm run test:all` runs both test suites.
 
 ## Medium priority
 

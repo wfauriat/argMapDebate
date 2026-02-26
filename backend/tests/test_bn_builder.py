@@ -5,6 +5,7 @@ import math
 import pytest
 
 from app.bn_builder import (
+    ABSENCE_PENALTY_FACTOR,
     CONTRADICT_SCALE,
     DEPENDS_SCALE,
     SUPPORT_SCALE,

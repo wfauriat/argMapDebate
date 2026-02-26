@@ -25,10 +25,17 @@ from app.models import (
 )
 
 # Scale factors for each edge type's influence in the log-odds model
-SUPPORT_SCALE = 2.0
-UNDERMINE_SCALE = 2.0
-DEPENDS_SCALE = 3.0
-CONTRADICT_SCALE = 2.0
+SUPPORT_SCALE = 1.2
+UNDERMINE_SCALE = 1.2
+DEPENDS_SCALE = 2.0
+CONTRADICT_SCALE = 1.2
+
+# When a supporting/undermining/contradicting parent is False, the reverse
+# effect is scaled by this factor.  0.5 was too aggressive — it meant "parent
+# being false actively hurts/helps almost as much as parent being true".
+# 0.25 gives a mild nudge: "this evidence isn't present" ≠ "this evidence
+# actively refutes you".
+ABSENCE_PENALTY_FACTOR = 0.25
 
 # Maximum parents per node (CPD has 2^k columns)
 MAX_PARENTS = 15
@@ -170,12 +177,12 @@ def _build_cpd(
                 if p_state:
                     delta += strength * SUPPORT_SCALE
                 else:
-                    delta -= strength * SUPPORT_SCALE * 0.5
+                    delta -= strength * SUPPORT_SCALE * ABSENCE_PENALTY_FACTOR
             elif edge.edge_type == EdgeType.Undermines:
                 if p_state:
                     delta -= strength * UNDERMINE_SCALE
                 else:
-                    delta += strength * UNDERMINE_SCALE * 0.5
+                    delta += strength * UNDERMINE_SCALE * ABSENCE_PENALTY_FACTOR
             elif edge.edge_type == EdgeType.DependsOn:
                 if not p_state:
                     delta -= strength * DEPENDS_SCALE
@@ -183,7 +190,7 @@ def _build_cpd(
                 if p_state:
                     delta -= strength * CONTRADICT_SCALE
                 else:
-                    delta += strength * CONTRADICT_SCALE * 0.5
+                    delta += strength * CONTRADICT_SCALE * ABSENCE_PENALTY_FACTOR
 
         p_true = _sigmoid(base_log_odds + delta)
         p_true_values.append(p_true)
