@@ -7,6 +7,7 @@ import Toolbar from "@/components/panels/Toolbar";
 import NodeEditor from "@/components/panels/NodeEditor";
 import EdgeEditor from "@/components/panels/EdgeEditor";
 import AnalysisPanel from "@/components/panels/AnalysisPanel";
+import ToastContainer from "@/components/ToastContainer";
 import { useSelectionStore } from "@/store/useSelectionStore";
 import { useThemeStore } from "@/store/useThemeStore";
 
@@ -86,6 +87,7 @@ export default function ArgumentMapper() {
           <Sidebar />
         </div>
       </div>
+      <ToastContainer />
     </ReactFlowProvider>
   );
 }

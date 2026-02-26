@@ -2,6 +2,7 @@
 
 import { useState, useRef } from "react";
 import { useArgumentStore } from "@/store/useArgumentStore";
+import { useToastStore } from "@/store/useToastStore";
 import { buildInferencePayload } from "@/lib/inferenceExport";
 import {
   loadInferenceSettings,
@@ -14,10 +15,9 @@ export default function InferenceButton() {
   const nodes = useArgumentStore((s) => s.nodes);
   const edges = useArgumentStore((s) => s.edges);
   const updateNodeData = useArgumentStore((s) => s.updateNodeData);
+  const addToast = useToastStore((s) => s.addToast);
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [warnings, setWarnings] = useState<string[]>([]);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [settings, setSettings] = useState<InferenceSettings>(loadInferenceSettings);
   const abortRef = useRef<AbortController | null>(null);
@@ -25,8 +25,6 @@ export default function InferenceButton() {
   const handleRun = async () => {
     if (loading || nodes.length === 0) return;
 
-    setError(null);
-    setWarnings([]);
     setLoading(true);
 
     const controller = new AbortController();
@@ -35,14 +33,21 @@ export default function InferenceButton() {
     try {
       const payload = buildInferencePayload(nodes, edges);
       const { result, warnings: w } = await runInference(payload, settings, controller.signal);
-      setWarnings(w);
+
+      for (const warn of w) {
+        addToast("warning", warn);
+      }
 
       for (const nodeResult of result.nodes) {
         updateNodeData(nodeResult.id, { posterior: nodeResult.posterior });
       }
+
+      if (w.length === 0) {
+        addToast("success", `Inference complete — ${result.nodes.length} posteriors updated.`);
+      }
     } catch (err: unknown) {
       if (err instanceof DOMException && err.name === "AbortError") return;
-      setError((err as Error).message);
+      addToast("error", (err as Error).message);
     } finally {
       setLoading(false);
     }
@@ -101,35 +106,6 @@ export default function InferenceButton() {
         </>
       )}
 
-      {/* Error toast */}
-      {error && (
-        <div className="absolute left-0 top-full mt-1 z-30 flex items-start gap-2 p-3 text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg shadow-lg w-80 dark:text-red-400 dark:bg-red-950 dark:border-red-800">
-          <span className="flex-1">{error}</span>
-          <button
-            onClick={() => setError(null)}
-            className="text-red-400 hover:text-red-600 dark:hover:text-red-300 shrink-0"
-          >
-            ✕
-          </button>
-        </div>
-      )}
-
-      {/* Warning toast */}
-      {warnings.length > 0 && !error && (
-        <div className="absolute left-0 top-full mt-1 z-30 flex items-start gap-2 p-3 text-sm text-amber-700 bg-amber-50 border border-amber-200 rounded-lg shadow-lg w-80 dark:text-amber-400 dark:bg-amber-950 dark:border-amber-800">
-          <div className="flex-1">
-            {warnings.map((w, i) => (
-              <p key={i}>{w}</p>
-            ))}
-          </div>
-          <button
-            onClick={() => setWarnings([])}
-            className="text-amber-400 hover:text-amber-600 dark:hover:text-amber-300 shrink-0"
-          >
-            ✕
-          </button>
-        </div>
-      )}
     </div>
   );
 }

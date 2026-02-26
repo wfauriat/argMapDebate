@@ -13,6 +13,7 @@ import InferenceButton from "./InferenceButton";
 import WizardButton from "./WizardButton";
 import { ARGUMENTATION_SCHEMES } from "@/templates/argumentSchemes";
 import { instantiateScheme } from "@/templates/instantiateScheme";
+import { useToastStore } from "@/store/useToastStore";
 
 export default function Toolbar() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -31,6 +32,7 @@ export default function Toolbar() {
   const reactFlow = useReactFlow();
   const theme = useThemeStore((s) => s.theme);
   const toggleTheme = useThemeStore((s) => s.toggleTheme);
+  const addToast = useToastStore((s) => s.addToast);
 
   const handleAddNode = (type: NodeType) => {
     const viewport = reactFlow.getViewport();
@@ -62,7 +64,7 @@ export default function Toolbar() {
         const graph = importGraph(ev.target?.result as string);
         loadGraph(graph);
       } catch (err) {
-        alert("Invalid argument map file: " + (err as Error).message);
+        addToast("error", "Invalid argument map file: " + (err as Error).message);
       }
     };
     reader.readAsText(file);
@@ -75,7 +77,7 @@ export default function Toolbar() {
       loadGraph(graph);
       setExampleDropdownOpen(false);
     } catch (err) {
-      alert("Failed to load example: " + (err as Error).message);
+      addToast("error", "Failed to load example: " + (err as Error).message);
     }
   };
 

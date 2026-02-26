@@ -10,7 +10,7 @@
 
 - [x] **Frontend component tests** — Add Vitest tests for InferenceButton and inferenceApi (mock fetch, error handling, backend-not-running scenario).
 - [x] **Posterior clearing** — Add a way to reset posteriors to null (button or auto-clear on graph structure change).
-- [ ] **Better error/warning UX** — Auto-dismiss toasts after a few seconds, or integrate a proper toast system.
+- [x] **Better error/warning UX** — Toast system with auto-dismiss (error 8s, warning 5s, success 3s, info 4s). Replaced alert() and inline toasts.
 - [ ] **Performance for large graphs** — Fall back to BeliefPropagation for graphs above a node/edge threshold.
 
 ## Lower priority
